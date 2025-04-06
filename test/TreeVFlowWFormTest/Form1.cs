@@ -17,7 +17,8 @@ namespace TreeVFlowWFormTest
         public Form1()
         {
             InitializeComponent();
-            this._treeVFlowNode1.AutoSize = false;
+            _treeVFlowNode1.AutoSize = false;
+            _treeVFlowNode1.LevelIndent = 10;
             
             
             _currentTreeNode = _treeVFlowNode1;
@@ -26,8 +27,16 @@ namespace TreeVFlowWFormTest
 
         private void JoinAllEvents(TreeVFlowNode node)
         {
-            node.TreeNodeSelected += (_, a) => _currentTreeNode = a.TreeNode as TreeVFlowNode;
-            node.ContentNodeSelected += (_, args) => _currentContentNode = args.Content;
+            node.TreeNodeSelected += (_, a) =>
+            {
+                _currentTreeNode = a.TreeNode as TreeVFlowNode;
+                lblTreeNode.Text=a.TreeNode.Text;
+            };
+            node.ContentNodeSelected += (_, args) =>
+            {
+                _currentContentNode = args.Content;
+                lblContentNode.Text=args.Content.Text;
+            };
             node.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             node.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
@@ -81,6 +90,19 @@ namespace TreeVFlowWFormTest
         private void button4_Click(object sender, EventArgs e)
         {
             (_currentContentNode?.Parent as TreeVFlowNode)?.RemoveContent(_currentContentNode);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if(_currentTreeNode!=null)
+                _treeVFlowNode1.ScrollShowTreeNode(_currentTreeNode);
+            
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if(_currentContentNode!=null)
+                _treeVFlowNode1.ScrollShowContentNode(_currentContentNode);
         }
     }
 }

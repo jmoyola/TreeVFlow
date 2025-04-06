@@ -1,4 +1,5 @@
-﻿using TreeVFlowControl.Core;
+﻿using System;
+using TreeVFlowControl.Core;
 using System.Windows.Forms;
 
 namespace TreeVFlowControl.Imp
@@ -24,6 +25,28 @@ namespace TreeVFlowControl.Imp
             node.ContentNodeAdded +=(_, args) => OnContentNodeAdded(args);
             node.ContentNodeRemoved +=(_, args) => OnContentNodeRemoved(args);
             node.ContentNodeSelected += (_, args) => OnContentNodeSelected(args);
+        }
+
+        public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)
+        {
+            if(treeNode is TreeVFlowNode treeVFlowNode)
+                ScrollControlIntoView(treeVFlowNode);
+        }
+        public void ScrollShowTreeNode(Func<IGraphicalTreeNode, bool> predicate)
+        {
+            var treeNode = TreeDeepFirstOrDefault(predicate);
+            ScrollShowTreeNode(treeNode);
+        }
+        
+        public void ScrollShowContentNode(Control contentNode)
+        {
+            ScrollControlIntoView(contentNode);
+        }
+        public void ScrollShowContentNode(Func<Control, bool> predicate)
+        {
+            var contentNode = ContentDeepFirstOrDefault(predicate);
+            if(contentNode != null)
+                ScrollControlIntoView(contentNode);
         }
     }
 }

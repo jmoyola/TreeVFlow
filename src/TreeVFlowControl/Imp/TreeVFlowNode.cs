@@ -277,9 +277,9 @@ namespace TreeVFlowControl.Imp
 
         protected override void OnClientSizeChanged(EventArgs e)
         {
-            var mMargin = Padding;
-            mMargin.Left=TreeLevel * LevelIndent + DefaultPadding.Left;
-
+            var mMargin = Margin;
+            mMargin.Left=(TreeLevel * LevelIndent) + DefaultMargin.Left;
+            Margin = mMargin;
             Controls.Cast<Control>()
                 .ToList().ForEach(v=>v.Width = Width-Margin.Horizontal - 6);
 
