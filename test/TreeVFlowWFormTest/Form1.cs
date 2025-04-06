@@ -1,9 +1,6 @@
 ﻿using System;
 
 using System.Drawing;
-using System.Globalization;
-
-using System.Threading;
 using System.Windows.Forms;
 using TreeVFlowControl.Core;
 using TreeVFlowControl.Imp;
@@ -13,26 +10,24 @@ namespace TreeVFlowWFormTest
 {
     public partial class Form1 : Form
     {
-        private int _count = 0;
+        private int _count;
         private TreeVFlowNode _currentTreeNode;
         private Control _currentContentNode;
         
         public Form1()
         {
             InitializeComponent();
-            //this._treeVFlowNode1.WrapContents = true;
             this._treeVFlowNode1.AutoSize = false;
-            //this._treeVFlowNode1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             
             
             _currentTreeNode = _treeVFlowNode1;
-            JoinAllEvents(this._treeVFlowNode1);
+            JoinAllEvents(_treeVFlowNode1);
         }
 
         private void JoinAllEvents(TreeVFlowNode node)
         {
-            node.TreeNodeSelected += (s, a) => _currentTreeNode = a.TreeNode as TreeVFlowNode;
-            node.ContentNodeSelected += (s, args) => _currentContentNode = args.Content;
+            node.TreeNodeSelected += (_, a) => _currentTreeNode = a.TreeNode as TreeVFlowNode;
+            node.ContentNodeSelected += (_, args) => _currentContentNode = args.Content;
             node.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             node.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
@@ -85,22 +80,7 @@ namespace TreeVFlowWFormTest
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var p=_currentContentNode as Control;
-            (p?.Parent as TreeVFlowNode)?.RemoveContent(p);
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            CultureInfo ci = Thread.CurrentThread.CurrentCulture;
-
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("zh-TW");
-            Thread.CurrentThread.CurrentCulture=CultureInfo.GetCultureInfo("zh-TW");
-            label1.TextAlign = ContentAlignment.MiddleRight;
-
-            label1.Font = new System.Drawing.Font("Microsoft JhengHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label1.Text = "卡斯亞卡\r -7.5";
-            
-            Thread.CurrentThread.CurrentCulture=ci;
+            (_currentContentNode?.Parent as TreeVFlowNode)?.RemoveContent(_currentContentNode);
         }
     }
 }

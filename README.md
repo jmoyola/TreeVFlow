@@ -1,2 +1,2 @@
 # TreeVFlow
-WinForms .Net Vertical Three control
+WinForms .Net Vertical Tree Flow control
