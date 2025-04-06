@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeVFlowWFormTest", "test\TreeVFlowWFormTest\TreeVFlowWFormTest.csproj", "{CAC75B62-4C5F-4F3A-993D-175BEDC9417B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeVFlowControl", "src\TreeVFlowControl\TreeVFlowControl.csproj", "{CE14D0A8-5362-4DF1-9674-6F286CCCA89D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAC75B62-4C5F-4F3A-993D-175BEDC9417B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC75B62-4C5F-4F3A-993D-175BEDC9417B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC75B62-4C5F-4F3A-993D-175BEDC9417B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC75B62-4C5F-4F3A-993D-175BEDC9417B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE14D0A8-5362-4DF1-9674-6F286CCCA89D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE14D0A8-5362-4DF1-9674-6F286CCCA89D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE14D0A8-5362-4DF1-9674-6F286CCCA89D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE14D0A8-5362-4DF1-9674-6F286CCCA89D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
