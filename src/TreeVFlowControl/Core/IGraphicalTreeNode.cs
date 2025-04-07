@@ -38,6 +38,9 @@ namespace TreeVFlowControl.Core
         Control Header { get; set; }
         Control Footer { get; set; }
         
+        void SuspendLayoutTreeNode();
+        void ResumeLayoutTreeNode();
+        
         IGraphicalTreeNode ParentTreeNode { get;}
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
