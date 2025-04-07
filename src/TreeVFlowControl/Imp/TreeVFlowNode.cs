@@ -47,6 +47,7 @@ namespace TreeVFlowControl.Imp
                     _header.Click -= HeaderClick;
                     _header.DoubleClick -= HeaderDoubleClick;
                     _header.SizeChanged -= ControlResize;
+                    _header.VisibleChanged -= ControlResize;
                 }
 
                 if (value != null)
@@ -57,6 +58,7 @@ namespace TreeVFlowControl.Imp
                     value.DoubleClick += HeaderDoubleClick;
                     value.Click += HeaderClick;
                     value.SizeChanged += ControlResize;
+                    value.VisibleChanged += ControlResize;
                 }
                 
                 _header = value;
@@ -79,6 +81,7 @@ namespace TreeVFlowControl.Imp
                 {
                     Controls.RemoveAt(Controls.Count - 1);
                     _footer.SizeChanged -= ControlResize;
+                    _footer.VisibleChanged -= ControlResize;
                 }
 
                 if (value != null)
@@ -88,6 +91,7 @@ namespace TreeVFlowControl.Imp
                     Controls.Add(value);
                     Controls.SetChildIndex(value, Controls.Count-1);
                     value.SizeChanged += ControlResize;
+                    value.VisibleChanged += ControlResize;
                 }
 
                 _footer = value;
@@ -169,8 +173,9 @@ namespace TreeVFlowControl.Imp
             Controls.Add(content);
             Controls.SetChildIndex(content, Controls.Count - (_footer==null?1:2));
             content.Click += ContentClick;
-            RefreshHeight();
             content.SizeChanged += ControlResize;
+            content.VisibleChanged += ControlResize;
+            RefreshHeight();
             OnContentNodeAdded(new TreeNodeEventArgs(this, content));
         }
 
@@ -178,8 +183,10 @@ namespace TreeVFlowControl.Imp
         {
             Controls.Remove(content);
             content.Click -= ContentClick;
-            RefreshHeight();
             content.SizeChanged -= ControlResize;
+            content.VisibleChanged -= ControlResize;
+            RefreshHeight();
+            
             OnContentNodeRemoved(new TreeNodeEventArgs(this, content));
         }
         

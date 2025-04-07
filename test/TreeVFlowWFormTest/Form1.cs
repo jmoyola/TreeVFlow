@@ -18,7 +18,7 @@ namespace TreeVFlowWFormTest
         {
             InitializeComponent();
             _treeVFlowNode1.AutoSize = false;
-            _treeVFlowNode1.LevelIndent = 10;
+            _treeVFlowNode1.LevelIndent = 5;
             
             
             _currentTreeNode = _treeVFlowNode1;
@@ -103,6 +103,24 @@ namespace TreeVFlowWFormTest
         {
             if(_currentContentNode!=null)
                 _treeVFlowNode1.ScrollShowContentNode(_currentContentNode);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if(_currentTreeNode!=null && _currentTreeNode.Header!=null)
+                _currentTreeNode.Header.Visible=!_currentTreeNode.Header.Visible;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if(_currentTreeNode!=null && _currentTreeNode.Footer!=null)
+                _currentTreeNode.Footer.Visible=!_currentTreeNode.Footer.Visible;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if(_currentContentNode!=null)
+                _currentContentNode.Visible=!_currentContentNode.Visible;
         }
     }
 }

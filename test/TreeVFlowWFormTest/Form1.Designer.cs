@@ -19,6 +19,9 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this._treeVFlowNode1 = new TreeVFlowControl.Imp.TreeVFlow();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.lblContentNode = new System.Windows.Forms.Label();
@@ -47,6 +50,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.button9);
+            this.splitContainer1.Panel2.Controls.Add(this.button8);
+            this.splitContainer1.Panel2.Controls.Add(this.button7);
             this.splitContainer1.Panel2.Controls.Add(this.button6);
             this.splitContainer1.Panel2.Controls.Add(this.button5);
             this.splitContainer1.Panel2.Controls.Add(this.lblContentNode);
@@ -57,7 +63,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.button3);
             this.splitContainer1.Panel2.Controls.Add(this.button2);
             this.splitContainer1.Panel2.Controls.Add(this.button1);
-            this.splitContainer1.Size = new System.Drawing.Size(1040, 672);
+            this.splitContainer1.Size = new System.Drawing.Size(1046, 696);
             this.splitContainer1.SplitterDistance = 341;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -75,9 +81,39 @@
             this._treeVFlowNode1.LevelIndent = 5;
             this._treeVFlowNode1.Location = new System.Drawing.Point(0, 0);
             this._treeVFlowNode1.Name = "_treeVFlowNode1";
-            this._treeVFlowNode1.Size = new System.Drawing.Size(341, 672);
+            this._treeVFlowNode1.Size = new System.Drawing.Size(341, 696);
             this._treeVFlowNode1.TabIndex = 0;
             this._treeVFlowNode1.Text = "Root";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(254, 418);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(194, 44);
+            this.button9.TabIndex = 12;
+            this.button9.Text = "ActiveContentNode Footer Toggle Visible";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(254, 368);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(194, 44);
+            this.button8.TabIndex = 11;
+            this.button8.Text = "ActiveTreeNode Footer Toggle Visible";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(251, 318);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(194, 44);
+            this.button7.TabIndex = 10;
+            this.button7.Text = "ActiveTreeNode Header Toggle Visible";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button6
             // 
@@ -175,7 +211,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1040, 672);
+            this.ClientSize = new System.Drawing.Size(1046, 696);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -186,6 +222,10 @@
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
 
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
