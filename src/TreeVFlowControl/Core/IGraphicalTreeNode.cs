@@ -18,8 +18,12 @@ namespace TreeVFlowControl.Core
     }
     public interface IGraphicalTreeNode
     {
-        event TreeNodeEventHandler TreeNodeSelected;
-        event TreeNodeEventHandler ContentNodeSelected;
+        event TreeNodeEventHandler TreeNodeHeaderClick;
+        event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
+        event TreeNodeEventHandler TreeNodeFooterClick;
+        event TreeNodeEventHandler TreeNodeFooterDoubleClick;
+        event TreeNodeEventHandler ContentNodeClick;
+        event TreeNodeEventHandler ContentNodeDoubleClick;
         event TreeNodeEventHandler TreeNodeFold;
         event TreeNodeEventHandler TreeNodeUnfold;
         event TreeNodeEventHandler TreeNodeAdded;

@@ -14,15 +14,6 @@ namespace TreeVFlowControl.Imp
         private Control _footer;
         private bool _isFold;
         
-        public event TreeNodeEventHandler TreeNodeSelected;
-        public event TreeNodeEventHandler ContentNodeSelected;
-        public event TreeNodeEventHandler TreeNodeFold;
-        public event TreeNodeEventHandler TreeNodeUnfold;
-        public event TreeNodeEventHandler TreeNodeAdded;
-        public event TreeNodeEventHandler TreeNodeRemoved;
-        public event TreeNodeEventHandler ContentNodeAdded;
-        public event TreeNodeEventHandler ContentNodeRemoved;
-        public event TreeNodeEventHandler TreeNodeRefresh;
         
         public TreeVFlowNode()
         : this(null) { }
@@ -31,7 +22,7 @@ namespace TreeVFlowControl.Imp
         {
             ColumnCount = 1;
             //FlowDirection = FlowDirection.TopDown;
-            
+            DoubleBuffered = true;
             Header = header;
             Footer = footer;            
         }
@@ -55,8 +46,8 @@ namespace TreeVFlowControl.Imp
                     Controls.Add(value);
                     Controls.SetChildIndex(value, 0);
                     
-                    value.DoubleClick += HeaderDoubleClick;
                     value.Click += HeaderClick;
+                    value.DoubleClick += HeaderDoubleClick;
                     value.SizeChanged += ControlResize;
                     value.VisibleChanged += ControlResize;
                 }
@@ -69,7 +60,7 @@ namespace TreeVFlowControl.Imp
 
         private void ControlResize(object sender, EventArgs e)
         {
-            RefreshHeight();
+            if(_refreshingTreeNode==null) RefreshHeight();
         }
         
         public Control Footer
@@ -80,6 +71,8 @@ namespace TreeVFlowControl.Imp
                 if (_footer != null)
                 {
                     Controls.RemoveAt(Controls.Count - 1);
+                    _footer.Click -= FooterClick;
+                    _footer.DoubleClick -= FooterDoubleClick;
                     _footer.SizeChanged -= ControlResize;
                     _footer.VisibleChanged -= ControlResize;
                 }
@@ -90,6 +83,8 @@ namespace TreeVFlowControl.Imp
                     value.Width = Width;
                     Controls.Add(value);
                     Controls.SetChildIndex(value, Controls.Count-1);
+                    value.Click += FooterClick;
+                    value.DoubleClick += FooterDoubleClick;
                     value.SizeChanged += ControlResize;
                     value.VisibleChanged += ControlResize;
                 }
@@ -107,26 +102,64 @@ namespace TreeVFlowControl.Imp
         
         private void HeaderClick(object sender, EventArgs args)
         {
-            OnTreeNodeSelected(new TreeNodeEventArgs(this, null));
+            OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, null));
         }
         private void HeaderDoubleClick(object sender, EventArgs args)
         {
-            TogleFold();
+            OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, null));
         }
-
+        private void FooterClick(object sender, EventArgs args)
+        {
+            OnTreeNodeFooterClick(new TreeNodeEventArgs(this, null));
+        }
+        private void FooterDoubleClick(object sender, EventArgs args)
+        {
+            OnTreeNodeFooterDoubleClick(new TreeNodeEventArgs(this, null));
+        }
         private void ContentClick(object sender, EventArgs args)
         {
-            OnContentNodeSelected(new TreeNodeEventArgs(this, (Control)sender));
+            OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
+        }
+        private void ContentDoubleClick(object sender, EventArgs args)
+        {
+            OnContentNodeDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
         }
 
 #region Events
-
+        public event TreeNodeEventHandler TreeNodeHeaderClick;
+        public event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
+        public event TreeNodeEventHandler TreeNodeFooterClick;
+        public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
+        public event TreeNodeEventHandler ContentNodeClick;
+        public event TreeNodeEventHandler ContentNodeDoubleClick;
+        public event TreeNodeEventHandler TreeNodeFold;
+        public event TreeNodeEventHandler TreeNodeUnfold;
+        public event TreeNodeEventHandler TreeNodeAdded;
+        public event TreeNodeEventHandler TreeNodeRemoved;
+        public event TreeNodeEventHandler ContentNodeAdded;
+        public event TreeNodeEventHandler ContentNodeRemoved;
+        public event TreeNodeEventHandler TreeNodeRefresh;
         
+        protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs args)
+        {
+            TreeNodeHeaderClick?.Invoke(this, args);
+        }
+        protected virtual void OnTreeNodeHeaderDoubleClick(TreeNodeEventArgs args)
+        {
+            TreeNodeHeaderDoubleClick?.Invoke(this, args);
+        }
+        protected virtual void OnTreeNodeFooterClick(TreeNodeEventArgs args)
+        {
+            TreeNodeFooterClick?.Invoke(this, args);
+        }
+        protected virtual void OnTreeNodeFooterDoubleClick(TreeNodeEventArgs args)
+        {
+            TreeNodeFooterDoubleClick?.Invoke(this, args);
+        }      
         protected virtual void OnTreeNodeFold(TreeNodeEventArgs args)
         {
             TreeNodeFold?.Invoke(this, args);
         }
-
         protected virtual void OnTreeNodeUnfold(TreeNodeEventArgs args)
         {
             TreeNodeUnfold?.Invoke(this, args);
@@ -139,18 +172,17 @@ namespace TreeVFlowControl.Imp
         {
             TreeNodeRemoved?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeSelected(TreeNodeEventArgs args)
-        {
-            TreeNodeSelected?.Invoke(this, args);
-        }
-        
         protected virtual void OnTreeNodeRefresh(TreeNodeEventArgs args)
         {
             TreeNodeRefresh?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeSelected(TreeNodeEventArgs args)
+        protected virtual void OnContentNodeClick(TreeNodeEventArgs args)
         {
-            ContentNodeSelected?.Invoke(this, args);
+            ContentNodeClick?.Invoke(this, args);
+        }
+        protected virtual void OnContentNodeDoubleClick(TreeNodeEventArgs args)
+        {
+            ContentNodeDoubleClick?.Invoke(this, args);
         }
         protected virtual void OnContentNodeAdded(TreeNodeEventArgs args)
         {
@@ -173,6 +205,7 @@ namespace TreeVFlowControl.Imp
             Controls.Add(content);
             Controls.SetChildIndex(content, Controls.Count - (_footer==null?1:2));
             content.Click += ContentClick;
+            content.DoubleClick += ContentDoubleClick;
             content.SizeChanged += ControlResize;
             content.VisibleChanged += ControlResize;
             RefreshHeight();
@@ -183,6 +216,7 @@ namespace TreeVFlowControl.Imp
         {
             Controls.Remove(content);
             content.Click -= ContentClick;
+            content.DoubleClick -= ContentDoubleClick;
             content.SizeChanged -= ControlResize;
             content.VisibleChanged -= ControlResize;
             RefreshHeight();
@@ -284,23 +318,41 @@ namespace TreeVFlowControl.Imp
 
         protected override void OnClientSizeChanged(EventArgs e)
         {
-            var mMargin = Margin;
-            mMargin.Left=(TreeLevel * LevelIndent) + DefaultMargin.Left;
-            Margin = mMargin;
-            Controls.Cast<Control>()
-                .ToList().ForEach(v=>v.Width = Width-Margin.Horizontal - 6);
+            if (_refreshingTreeNode == null)
+            {
+                var mMargin = Margin;
+                mMargin.Left = (TreeLevel * LevelIndent) + DefaultMargin.Left;
+                Margin = mMargin;
+                Controls.Cast<Control>()
+                    .ToList().ForEach(v => v.Width = Width - Margin.Horizontal - 6);
+            }
 
             base.OnClientSizeChanged(e);
         }
 
+        private TreeVFlowNode _refreshingTreeNode;
         private void RefreshHeight()
         {
+            TreeVFlowNode root = (TreeVFlowNode)this.RootTreeNode;
+            if (root._refreshingTreeNode==null)
+            {
+                root._refreshingTreeNode = this;
+                root.SuspendLayout();
+            }
+            
             Height = (_isFold?ControlHeight(_header):
                 Controls.Cast<Control>()
                     .ToList()
                     .Sum(v => ControlHeight(v) + v.Margin.Vertical));
             
             ((TreeVFlowNode)ParentTreeNode)?.RefreshHeight();
+            
+            if (root._refreshingTreeNode==this)
+            {
+                root._refreshingTreeNode = null;
+                root.ResumeLayout(true);
+            }
+
         }
 
         public override string ToString()

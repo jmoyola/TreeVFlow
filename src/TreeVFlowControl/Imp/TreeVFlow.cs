@@ -20,11 +20,14 @@ namespace TreeVFlowControl.Imp
             node.TreeNodeRefresh +=(_, args) => OnTreeNodeRefresh(args);
             node.TreeNodeFold += (_, args) => OnTreeNodeFold(args);
             node.TreeNodeUnfold += (_, args) => OnTreeNodeUnfold(args);
-            node.TreeNodeSelected += (_, args) => OnTreeNodeSelected(args);
-
+            node.TreeNodeHeaderClick += (_, args) => OnTreeNodeHeaderClick(args);
+            node.TreeNodeHeaderDoubleClick += (_, args) => OnTreeNodeHeaderDoubleClick(args);
+            node.TreeNodeFooterClick += (_, args) => OnTreeNodeFooterClick(args);
+            node.TreeNodeFooterDoubleClick += (_, args) => OnTreeNodeFooterDoubleClick(args);
             node.ContentNodeAdded +=(_, args) => OnContentNodeAdded(args);
             node.ContentNodeRemoved +=(_, args) => OnContentNodeRemoved(args);
-            node.ContentNodeSelected += (_, args) => OnContentNodeSelected(args);
+            node.ContentNodeClick += (_, args) => OnContentNodeClick(args);
+            node.ContentNodeDoubleClick += (_, args) => OnContentNodeDoubleClick(args);
         }
 
         public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)

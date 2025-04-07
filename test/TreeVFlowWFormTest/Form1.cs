@@ -27,12 +27,12 @@ namespace TreeVFlowWFormTest
 
         private void JoinAllEvents(TreeVFlowNode node)
         {
-            node.TreeNodeSelected += (_, a) =>
+            node.TreeNodeHeaderClick += (_, a) =>
             {
                 _currentTreeNode = a.TreeNode as TreeVFlowNode;
                 lblTreeNode.Text=a.TreeNode.Text;
             };
-            node.ContentNodeSelected += (_, args) =>
+            node.ContentNodeClick += (_, args) =>
             {
                 _currentContentNode = args.Content;
                 lblContentNode.Text=args.Content.Text;
@@ -69,6 +69,7 @@ namespace TreeVFlowWFormTest
             
             _count ++;
             TreeVFlowNode nn = new TreeVFlowNode {Text= "Header " + _count , Height = 30, Header= new Label(){Text = "Header"  + _count, Height=30}, Footer = new Label(){Text = "Footer"  + _count, Height=30}};
+            nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.TogleFold(); 
             _currentTreeNode.AddTreeNode(nn);
             
 
