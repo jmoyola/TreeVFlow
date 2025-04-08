@@ -8,9 +8,14 @@ namespace TreeVFlowControl.Imp
     {
         public TreeVFlow()
         {
-            this.AutoSize = true;
-            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            this.TreeNodeAdded+=(sender, args) =>JoinAllEvents(args.TreeNode);
+            Init();
+            TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
+        }
+
+        private void Init()
+        {
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;   
         }
         
         private void JoinAllEvents(IGraphicalTreeNode node)
@@ -18,8 +23,8 @@ namespace TreeVFlowControl.Imp
             node.TreeNodeAdded +=(_, args) => OnTreeNodeAdded(args);
             node.TreeNodeRemoved +=(_, args) => OnTreeNodeRemoved(args);
             node.TreeNodeRefresh +=(_, args) => OnTreeNodeRefresh(args);
-            node.TreeNodeFold += (_, args) => OnTreeNodeFold(args);
-            node.TreeNodeUnfold += (_, args) => OnTreeNodeUnfold(args);
+            node.TreeNodeCollapsed += (_, args) => OnTreeNodeCollapsed(args);
+            node.TreeNodeExpanded += (_, args) => OnTreeNodeExpanded(args);
             node.TreeNodeHeaderClick += (_, args) => OnTreeNodeHeaderClick(args);
             node.TreeNodeHeaderDoubleClick += (_, args) => OnTreeNodeHeaderDoubleClick(args);
             node.TreeNodeFooterClick += (_, args) => OnTreeNodeFooterClick(args);

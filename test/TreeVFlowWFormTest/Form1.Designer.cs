@@ -19,6 +19,7 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this._treeVFlowNode1 = new TreeVFlowControl.Imp.TreeVFlow();
+            this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -50,6 +51,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.button10);
             this.splitContainer1.Panel2.Controls.Add(this.button9);
             this.splitContainer1.Panel2.Controls.Add(this.button8);
             this.splitContainer1.Panel2.Controls.Add(this.button7);
@@ -63,7 +65,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.button3);
             this.splitContainer1.Panel2.Controls.Add(this.button2);
             this.splitContainer1.Panel2.Controls.Add(this.button1);
-            this.splitContainer1.Size = new System.Drawing.Size(1046, 696);
+            this.splitContainer1.Size = new System.Drawing.Size(1050, 712);
             this.splitContainer1.SplitterDistance = 341;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -81,13 +83,23 @@
             this._treeVFlowNode1.LevelIndent = 5;
             this._treeVFlowNode1.Location = new System.Drawing.Point(0, 0);
             this._treeVFlowNode1.Name = "_treeVFlowNode1";
-            this._treeVFlowNode1.Size = new System.Drawing.Size(341, 696);
+            this._treeVFlowNode1.Size = new System.Drawing.Size(341, 712);
             this._treeVFlowNode1.TabIndex = 0;
             this._treeVFlowNode1.Text = "Root";
             // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(254, 324);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(194, 44);
+            this.button10.TabIndex = 13;
+            this.button10.Text = "ActiveTreeNode Toggle Visible";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(254, 418);
+            this.button9.Location = new System.Drawing.Point(254, 474);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(194, 44);
             this.button9.TabIndex = 12;
@@ -97,7 +109,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(254, 368);
+            this.button8.Location = new System.Drawing.Point(254, 424);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(194, 44);
             this.button8.TabIndex = 11;
@@ -107,7 +119,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(251, 318);
+            this.button7.Location = new System.Drawing.Point(254, 374);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(194, 44);
             this.button7.TabIndex = 10;
@@ -211,7 +223,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1046, 696);
+            this.ClientSize = new System.Drawing.Size(1050, 712);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -222,6 +234,8 @@
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button button10;
 
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;

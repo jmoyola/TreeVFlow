@@ -8,7 +8,7 @@ namespace TreeVFlowControl.Core
     public delegate void TreeNodeEventHandler(object sender, TreeNodeEventArgs args);
     public class TreeNodeEventArgs : EventArgs
     {
-        public TreeNodeEventArgs(IGraphicalTreeNode treeNode, Control content)
+        public TreeNodeEventArgs(IGraphicalTreeNode treeNode, Control content=null)
         {
             TreeNode = treeNode;
             Content=content;
@@ -24,8 +24,8 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         event TreeNodeEventHandler ContentNodeClick;
         event TreeNodeEventHandler ContentNodeDoubleClick;
-        event TreeNodeEventHandler TreeNodeFold;
-        event TreeNodeEventHandler TreeNodeUnfold;
+        event TreeNodeEventHandler TreeNodeCollapsed;
+        event TreeNodeEventHandler TreeNodeExpanded;
         event TreeNodeEventHandler TreeNodeAdded;
         event TreeNodeEventHandler TreeNodeRemoved;
         event TreeNodeEventHandler ContentNodeAdded;
@@ -47,6 +47,7 @@ namespace TreeVFlowControl.Core
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
         IList<IGraphicalTreeNode> TreeNodes { get; }
+        void ClearTreeNodes();
         IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
         void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
         void RemoveTreeNode();
@@ -55,11 +56,13 @@ namespace TreeVFlowControl.Core
         
         void AddContent(Control content);
         void RemoveContent(Control content);
+        void ClearContent();
         IList<Control> TreeContent { get; }
-        bool IsFold { get; }
-        void TogleFold();
-        void Fold();
-        void Unfold();
+        void ClearAll();
+        bool IsExpanded { get; }
+        void ToogleExpand();
+        void Collapse();
+        void Expand();
         Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);
         IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
     }
