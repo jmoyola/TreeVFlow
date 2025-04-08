@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using TreeVFlowControl.Core;
@@ -245,9 +246,7 @@ namespace TreeVFlowControl.Imp
             var newTreeVFlowNode = newTreeNode as TreeVFlowNode; 
             if(newTreeVFlowNode==null) throw new ArgumentNullException(nameof(newTreeNode));
             
-            SuspendLayoutTreeNode();
-            newTreeVFlowNode.SuspendLayoutTreeNode();
-            
+            SuspendLayoutTree();
             newTreeVFlowNode.Visible = true;
             newTreeVFlowNode.LevelIndent = LevelIndent;
             //newTreeNode.FlowDirection = FlowDirection;
@@ -257,8 +256,7 @@ namespace TreeVFlowControl.Imp
             newTreeVFlowNode.Width = Width;
             Controls.Add(newTreeVFlowNode);
             Controls.SetChildIndex(newTreeVFlowNode, Controls.Count - (_footer==null?1:2));
-            newTreeVFlowNode.ResumeLayoutTreeNode();
-            ResumeLayoutTreeNode();
+            ResumeLayoutTree();
             
             OnTreeNodeAdded(new TreeNodeEventArgs(newTreeVFlowNode, null));
             newTreeVFlowNode.RefreshHeight();
@@ -272,10 +270,10 @@ namespace TreeVFlowControl.Imp
             var treeNodeToRemoveToRemove = treeNodeToRemove as TreeVFlowNode; 
             if(treeNodeToRemoveToRemove==null) throw new ArgumentNullException(nameof(treeNodeToRemove));
             
-            SuspendLayoutTreeNode();
+            RootTreeNode.SuspendLayoutTree();
             Controls.Remove(treeNodeToRemoveToRemove);
             RefreshHeight();
-            ResumeLayoutTreeNode();
+            RootTreeNode.ResumeLayoutTree();
             
             OnTreeNodeRemoved(new TreeNodeEventArgs(treeNodeToRemoveToRemove, null));
         }
@@ -302,14 +300,14 @@ namespace TreeVFlowControl.Imp
             
             _isFold = fold;
 
-            SuspendLayoutTreeNode();
+            RootTreeNode.SuspendLayoutTree();
             var controls = Controls.Cast<Control>().ToList();
             for (int i = 0; i < controls.Count; i++)
                 if (i > (_header==null?-1:0) && i < controls.Count - (_footer==null?0:1)) controls[i].Visible = !fold;
             
             //RefreshHeight();
 
-            ResumeLayoutTreeNode();
+            RootTreeNode.ResumeLayoutTree();
             
             if (fold)
                 OnTreeNodeFold(new TreeNodeEventArgs(this, null));
@@ -342,19 +340,25 @@ namespace TreeVFlowControl.Imp
         
         private void WidthChanged()
         {
-            SuspendLayoutTreeNode();
+            RootTreeNode.SuspendLayoutTree();
             var mMargin = Margin;
             mMargin.Left = (TreeLevel * LevelIndent) + DefaultMargin.Left;
             Margin = mMargin;
             Controls.Cast<Control>()
                 .ToList().ForEach(v => v.Width = Width - Margin.Horizontal - 6);
-            ResumeLayoutTreeNode();
+            RootTreeNode.ResumeLayoutTree();
         }
 
+        public void SuspendLayoutTree()
+        {
+            SuspendLayoutTreeNode();;
+            TreeNodes.ToList().ForEach(v=>v.SuspendLayoutTreeNode());
+        }
         public void SuspendLayoutTreeNode()
         {
             if (_suspendLayoutCount == 0)
             {
+                Debug.WriteLine($"SuspendLayoutTreeNode ({this}) do it!");
                 SuspendLayout();
                 Controls.Cast<Control>().ToList().ForEach(v => v.SuspendLayout());
             }
@@ -362,6 +366,11 @@ namespace TreeVFlowControl.Imp
             _suspendLayoutCount++;
         }
         
+        public void ResumeLayoutTree()
+        {
+            ResumeLayoutTreeNode();
+            TreeNodes.ToList().ForEach(v=>v.ResumeLayoutTreeNode());
+        }
         public void ResumeLayoutTreeNode()
         {
             if (_suspendLayoutCount > 0)
@@ -370,16 +379,16 @@ namespace TreeVFlowControl.Imp
 
                 if (_suspendLayoutCount == 0)
                 {
+                    Debug.WriteLine($"ResumeLayoutTreeNode ({this}) do it!!");
                     ResumeLayout();
                     Controls.Cast<Control>().ToList().ForEach(v => v.ResumeLayout());
                 }
             }
-            
         }
         
         private void RefreshHeight()
         {
-            SuspendLayoutTreeNode();
+            RootTreeNode.SuspendLayoutTree();
             Height = (_isFold?ControlHeight(_header):
                 Controls.Cast<Control>()
                     .ToList()
@@ -387,7 +396,7 @@ namespace TreeVFlowControl.Imp
             
             ((TreeVFlowNode)ParentTreeNode)?.RefreshHeight();
             
-            ResumeLayoutTreeNode();
+            RootTreeNode.ResumeLayoutTree();
         }
 
         public override string ToString()
