@@ -13,10 +13,14 @@ namespace TreeVFlowControl.Imp
         private readonly SemaphoreSlim _nodeLock = new (1, 1);
         
         private int _suspendLayoutCount;
+        
+        private int _lastHeight;
+        private int _lastWidth;
         public int LevelIndent { get; set; } = 10;
         private Control _header;
         private Control _footer;
         private bool _isExpanded;
+        private bool _isDisabled;
         
         public TreeVFlowNode()
         : this(null) { }
@@ -405,18 +409,39 @@ namespace TreeVFlowControl.Imp
                 TreeNodeLock.Release();
             }
         }
-        public bool IsExpanded=>_isExpanded;
-        public void ToogleExpand()
+        
+        public virtual bool IsDisabled=>_isDisabled;
+        public virtual void DisableItem()
         {
-            Expand(!_isExpanded);
+            if (_isDisabled) return;
+            
+            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=false);
+            _isDisabled = true;
+        }
+    
+        public virtual void EnableItem()
+        {
+            if (!_isDisabled) return;
+        
+            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=true);
+            _isDisabled = false;
+        }
+        
+        public bool IsExpanded=>_isExpanded;
+        public void ToggleItems()
+        {
+            if(_isExpanded)
+                Expand(false);
+            else
+                Expand(true);
         }
         
         public void Collapse() {
-            Expand(true);
+            Expand(false);
         }
         
         public void Expand() {
-            Expand(false);
+            Expand(true);
         }
         private void Expand(bool expand) {
             try
@@ -456,10 +481,10 @@ namespace TreeVFlowControl.Imp
         private int ControlHeight(Control control)
         {
             if(control==null) return 0;
-            return control.Visible?control.Height:0;
+            return control.Visible?control.Height + control.Margin.Vertical:0;
         }
 
-        private int _lastWidth;
+
         protected override void OnClientSizeChanged(EventArgs e)
         {
             if (_lastWidth != Width)
@@ -522,7 +547,7 @@ namespace TreeVFlowControl.Imp
         private void RefreshHeight()
         {
             RootTreeNode.SuspendLayoutTree();
-            Height = (_isExpanded?ControlHeight(_header):
+            Height =  (!_isExpanded?ControlHeight(_header) + Margin.Vertical:
                 Controls.Cast<Control>()
                     .ToList()
                     .Sum(v => ControlHeight(v) + v.Margin.Vertical));

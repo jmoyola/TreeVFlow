@@ -60,7 +60,7 @@ namespace TreeVFlowControl.Core
         IList<Control> TreeContent { get; }
         void ClearAll();
         bool IsExpanded { get; }
-        void ToogleExpand();
+        void ToggleItems();
         void Collapse();
         void Expand();
         Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);
