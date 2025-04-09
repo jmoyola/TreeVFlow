@@ -77,7 +77,7 @@ namespace TreeVFlowWFormTest
             
             _count ++;
             TreeVFlowNode nn = new TreeVFlowNode {Text= "Header " + _count , Height = 30, Header= new Label(){Text = "Header"  + _count, Height=30, BorderStyle = BorderStyle.FixedSingle}, Footer = new Label(){Text = "Footer"  + _count, Height=30, BorderStyle = BorderStyle.FixedSingle}};
-            nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.ToogleExpand(); 
+            nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.ToggleItems(); 
             _currentTreeNode.AddTreeNode(nn);
             
 
@@ -136,6 +136,16 @@ namespace TreeVFlowWFormTest
         {
             if(_currentTreeNode!=null)
                 _currentTreeNode.Visible=!_currentTreeNode.Visible;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if (_currentTreeNode == null)
+                return;
+            
+            _count ++;
+            GroupItemNode nn = new GroupItemNode {Text= "Header " + _count , Height = 30};
+            _currentTreeNode.AddTreeNode(nn);
         }
     }
 }

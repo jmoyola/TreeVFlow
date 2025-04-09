@@ -92,5 +92,10 @@
       <Name>TreeVFlowControl</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\arrow_down_32.png" />
+    <EmbeddedResource Include="Resources\arrow_up_32.png" />
+    <EmbeddedResource Include="Resources\pad_lock_32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
