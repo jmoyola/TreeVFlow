@@ -52,26 +52,17 @@ namespace TreeVFlowControl.Imp
                     if (_header != null)
                     {
                         Controls.RemoveAt(0);
-                        _header.Click -= HeaderClick;
-                        _header.DoubleClick -= HeaderDoubleClick;
-                        _header.SizeChanged -= ControlResize;
-                        _header.VisibleChanged -= ControlResize;
+                        SubControlRemoved(_header);
                     }
 
                     if (value != null)
                     {
                         Controls.Add(value);
                         Controls.SetChildIndex(value, 0);
-
-                        value.Click += HeaderClick;
-                        value.DoubleClick += HeaderDoubleClick;
-                        value.SizeChanged += ControlResize;
-                        value.VisibleChanged += ControlResize;
+                        SubControlAdded(value);
                     }
-
+                    
                     _header = value;
-
-                    RefreshHeight();
                 }
                 finally
                 {
@@ -97,27 +88,17 @@ namespace TreeVFlowControl.Imp
                     if (_footer != null)
                     {
                         Controls.RemoveAt(Controls.Count - 1);
-                        _footer.Click -= FooterClick;
-                        _footer.DoubleClick -= FooterDoubleClick;
-                        _footer.SizeChanged -= ControlResize;
-                        _footer.VisibleChanged -= ControlResize;
+                        SubControlRemoved(_footer);
                     }
 
                     if (value != null)
                     {
-                        value.Left = LevelIndent * TreeLevel;
-                        value.Width = Width;
                         Controls.Add(value);
                         Controls.SetChildIndex(value, Controls.Count - 1);
-                        value.Click += FooterClick;
-                        value.DoubleClick += FooterDoubleClick;
-                        value.SizeChanged += ControlResize;
-                        value.VisibleChanged += ControlResize;
+                        SubControlAdded(value);
                     }
 
                     _footer = value;
-
-                    RefreshHeight();
                 }
                 finally
                 {
@@ -129,31 +110,25 @@ namespace TreeVFlowControl.Imp
         public IGraphicalTreeNode ParentTreeNode => Parent as TreeVFlowNode;
         public IGraphicalTreeNode RootTreeNode=>ParentTreeNode==null?this:ParentTreeNode.RootTreeNode;
         public int TreeLevel => ParentTreeNode == null ? 0 : ParentTreeNode.TreeLevel + 1;
-
         
-        private void HeaderClick(object sender, EventArgs args)
-        {
-            OnTreeNodeHeaderClick(new TreeNodeEventArgs(this));
-        }
-        private void HeaderDoubleClick(object sender, EventArgs args)
-        {
-            OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this));
-        }
-        private void FooterClick(object sender, EventArgs args)
-        {
-            OnTreeNodeFooterClick(new TreeNodeEventArgs(this));
-        }
-        private void FooterDoubleClick(object sender, EventArgs args)
-        {
-            OnTreeNodeFooterDoubleClick(new TreeNodeEventArgs(this));
-        }
         private void ContentClick(object sender, EventArgs args)
         {
-            OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
+            if (sender == _header)
+                OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
+            else if (sender == _footer)
+                OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
+            else
+                OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
+
         }
         private void ContentDoubleClick(object sender, EventArgs args)
         {
-            OnContentNodeDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
+            if (sender == _header)
+                OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
+            else if (sender == _footer)
+                OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
+            else
+                OnContentNodeDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
         }
 
 #region Events
@@ -170,6 +145,8 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler ContentNodeAdded;
         public event TreeNodeEventHandler ContentNodeRemoved;
         public event TreeNodeEventHandler TreeNodeRefresh;
+        public event TreeNodeEventHandler ResizeHeight;
+        public event TreeNodeEventHandler ResizeWidth;
         
         protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs args)
         {
@@ -223,8 +200,36 @@ namespace TreeVFlowControl.Imp
         {
             ContentNodeRemoved?.Invoke(this, args);
         }
+        protected virtual void OnResizeWidth(TreeNodeEventArgs args)
+        {
+            ResizeWidth?.Invoke(this, args);
+        }
+        protected virtual void OnResizeHeight(TreeNodeEventArgs args)
+        {
+            ResizeHeight?.Invoke(this, args);
+        }
 
 #endregion
+
+        private void SubControlAdded(Control control)
+        {
+            RefreshHeight();
+            control.Left = LevelIndent * TreeLevel;
+            control.Width = Width;
+            control.Click += ContentClick;
+            control.DoubleClick += ContentDoubleClick;
+            //control.SizeChanged += ControlResize;
+            control.VisibleChanged += ControlResize;
+        }
+        
+        private void SubControlRemoved(Control control)
+        {
+            control.Click -= ContentClick;
+            control.DoubleClick -= ContentDoubleClick;
+            //control.SizeChanged -= ControlResize;
+            control.VisibleChanged -= ControlResize;
+            RefreshHeight();
+        }
         
         public void AddContent(Control content)
         {
@@ -235,15 +240,10 @@ namespace TreeVFlowControl.Imp
                 if (content == null) throw new ArgumentNullException(nameof(content));
                 if (TreeNodes.Count > 0) return;
 
-                content.Left = LevelIndent * TreeLevel;
-                content.Width = Width;
                 Controls.Add(content);
                 Controls.SetChildIndex(content, Controls.Count - (_footer == null ? 1 : 2));
-                content.Click += ContentClick;
-                content.DoubleClick += ContentDoubleClick;
-                content.SizeChanged += ControlResize;
-                content.VisibleChanged += ControlResize;
-                RefreshHeight();
+                SubControlAdded(content);
+                
                 OnContentNodeAdded(new TreeNodeEventArgs(this, content));
             }
             finally
@@ -259,11 +259,7 @@ namespace TreeVFlowControl.Imp
                 TreeNodeLock.Wait();
                 
                 Controls.Remove(content);
-                content.Click -= ContentClick;
-                content.DoubleClick -= ContentDoubleClick;
-                content.SizeChanged -= ControlResize;
-                content.VisibleChanged -= ControlResize;
-                RefreshHeight();
+                SubControlRemoved(content);
 
                 OnContentNodeRemoved(new TreeNodeEventArgs(this, content));
             }
@@ -311,7 +307,7 @@ namespace TreeVFlowControl.Imp
                 var newTreeVFlowNode = newTreeNode as TreeVFlowNode;
                 if (newTreeVFlowNode == null) throw new ArgumentNullException(nameof(newTreeNode));
 
-                SuspendLayoutTree();
+                newTreeVFlowNode.SuspendLayout();
                 newTreeVFlowNode.Visible = true;
                 newTreeVFlowNode.LevelIndent = LevelIndent;
                 newTreeVFlowNode.ColumnCount = ColumnCount;
@@ -321,13 +317,13 @@ namespace TreeVFlowControl.Imp
                 
                 RefreshWidth(newTreeVFlowNode);
                 RefreshMargin(newTreeVFlowNode);
+                newTreeVFlowNode.RefreshHeight();
                 //newTreeVFlowNode.Width = ((TreeVFlowNode)ParentTreeNode)?.Width??0 -newTreeVFlowNode.Margin.Horizontal ;
-                
-                ResumeLayoutTree();
 
                 OnTreeNodeAdded(new TreeNodeEventArgs(newTreeVFlowNode));
-                newTreeVFlowNode.RefreshHeight();
-
+                
+                
+                newTreeVFlowNode.ResumeLayout();
 
                 return newTreeVFlowNode;
             }
@@ -335,24 +331,6 @@ namespace TreeVFlowControl.Imp
             {
                 TreeNodeLock.Release();
             }
-        }
-
-        private void RefreshMargin(TreeVFlowNode node)
-        {
-            var mMargin = node.Margin;
-            mMargin.Left = (node.TreeLevel * node.LevelIndent);
-            node.Margin = mMargin;
-        }
-        
-        private void RefreshWidth(TreeVFlowNode node)
-        {
-            if (node.ParentTreeNode != null)
-            {
-                node.Width = ((TreeVFlowNode)node.ParentTreeNode).Width - node.Margin.Horizontal - 9;
-            }
-
-            node.Controls.Cast<Control>()
-                .ToList().ForEach(v => v.Width = node.Width - v.Margin.Horizontal);// (node.LevelIndent*node.TreeLevel));
         }
         
         public void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove)
@@ -364,10 +342,10 @@ namespace TreeVFlowControl.Imp
                 var treeNodeToRemoveToRemove = treeNodeToRemove as TreeVFlowNode;
                 if (treeNodeToRemoveToRemove == null) throw new ArgumentNullException(nameof(treeNodeToRemove));
 
-                RootTreeNode.SuspendLayoutTree();
+                SuspendLayoutNode();
                 Controls.Remove(treeNodeToRemoveToRemove);
                 RefreshHeight();
-                RootTreeNode.ResumeLayoutTree();
+                ResumeLayoutNode();
 
                 OnTreeNodeRemoved(new TreeNodeEventArgs(treeNodeToRemoveToRemove));
             }
@@ -452,7 +430,7 @@ namespace TreeVFlowControl.Imp
 
                 _isExpanded = expand;
 
-                RootTreeNode.SuspendLayoutTree();
+                RootTreeNode.SuspendLayoutDeep();
                 var controls = Controls.Cast<Control>().ToList();
                 for (int i = 0; i < controls.Count; i++)
                     if (i > (_header == null ? -1 : 0) && i < controls.Count - (_footer == null ? 0 : 1))
@@ -460,7 +438,7 @@ namespace TreeVFlowControl.Imp
 
                 RefreshHeight();
 
-                RootTreeNode.ResumeLayoutTree();
+                RootTreeNode.ResumeLayoutDeep();
 
                 if (_isExpanded)
                     OnTreeNodeExpanded(new TreeNodeEventArgs(this));
@@ -484,39 +462,75 @@ namespace TreeVFlowControl.Imp
             return control.Visible?control.Height + control.Margin.Vertical:0;
         }
 
-
-        protected override void OnClientSizeChanged(EventArgs e)
+        protected override void OnResize(EventArgs eventargs)
         {
-            if (_lastWidth != Width)
+            //if (_lastWidth != Width)
+            //{
+            //    OnResizeWidth(_lastWidth, Width);
+            //    _lastWidth = Width;
+            //}
+            
+            if (_lastHeight != Height)
             {
-                WidthChanged();
-                _lastWidth = Width;
+                OnResizeHeight(_lastHeight, Height);
+                _lastHeight = Height;
             }
 
-            base.OnClientSizeChanged(e);
+            base.OnResize(eventargs);
         }
         
-        private void WidthChanged()
+        private void OnResizeHeight(int lastHeight, int newHeight)
         {
-            RootTreeNode.SuspendLayoutTree();
+            OnResizeHeight(new TreeNodeEventArgs(this));
+        }
+        
+        public virtual void OnResizeWidth(int lastWidth, int newWidth)
+        {
+            if (this != RootTreeNode)
+                return;
             
-            RefreshMargin(this);
-            RefreshWidth(this);
+            SuspendLayoutDeep();
+            
+            RefreshWithNode(this);
             //Controls.Cast<Control>()
             //    .ToList().ForEach(v => v.Width = Width - Margin.Horizontal - 6);
-            RootTreeNode.ResumeLayoutTree();
+            ResumeLayoutDeep();
+            
+            OnResizeWidth(new TreeNodeEventArgs(this));
+        }
+        private void RefreshWithNode(TreeVFlowNode node)
+        {
+            RefreshMargin(node);
+            RefreshWidth(node);
+            TreeNodes.ToList().ForEach(v=>RefreshWithNode(v as TreeVFlowNode));
         }
 
-        public void SuspendLayoutTree()
-        {
-            SuspendLayoutTreeNode();
-            TreeNodes.ToList().ForEach(v=>v.SuspendLayoutTreeNode());
-        }
-        public void SuspendLayoutTreeNode()
+        public void SuspendLayoutDeep()
         {
             if (_suspendLayoutCount == 0)
             {
-                Debug.WriteLine($"SuspendLayoutTreeNode ({this}) do it!");
+                Debug.WriteLine($"SuspendLayoutDeep ({this}) do it!");
+                SuspendLayout();
+                Controls.Cast<Control>().ToList().ForEach(v =>
+                {
+                    if(v is TreeVFlowNode tvNode)
+                        tvNode.SuspendLayoutDeep();
+                    else
+                        v.SuspendLayout();
+                });
+            }
+
+            _suspendLayoutCount++;
+            
+            SuspendLayoutNode();
+            TreeNodes.ToList().ForEach(v=>v.SuspendLayoutNode());
+        }
+        
+        public void SuspendLayoutNode()
+        {
+            if (_suspendLayoutCount == 0)
+            {
+                Debug.WriteLine($"SuspendLayoutNode ({this}) do it!");
                 SuspendLayout();
                 Controls.Cast<Control>().ToList().ForEach(v => v.SuspendLayout());
             }
@@ -524,12 +538,12 @@ namespace TreeVFlowControl.Imp
             _suspendLayoutCount++;
         }
         
-        public void ResumeLayoutTree()
+        public void ResumeLayoutDeep()
         {
-            ResumeLayoutTreeNode();
-            TreeNodes.ToList().ForEach(v=>v.ResumeLayoutTreeNode());
+            ResumeLayoutNode();
+            TreeNodes.ToList().ForEach(v=>v.ResumeLayoutNode());
         }
-        public void ResumeLayoutTreeNode()
+        public void ResumeLayoutNode()
         {
             if (_suspendLayoutCount > 0)
             {
@@ -537,7 +551,7 @@ namespace TreeVFlowControl.Imp
 
                 if (_suspendLayoutCount == 0)
                 {
-                    Debug.WriteLine($"ResumeLayoutTreeNode ({this}) do it!!");
+                    Debug.WriteLine($"ResumeLayoutNode ({this}) do it!!");
                     ResumeLayout();
                     Controls.Cast<Control>().ToList().ForEach(v => v.ResumeLayout());
                 }
@@ -546,7 +560,7 @@ namespace TreeVFlowControl.Imp
         
         private void RefreshHeight()
         {
-            RootTreeNode.SuspendLayoutTree();
+            SuspendLayoutNode();
             Height =  (!_isExpanded?ControlHeight(_header) + Margin.Vertical:
                 Controls.Cast<Control>()
                     .ToList()
@@ -554,7 +568,25 @@ namespace TreeVFlowControl.Imp
             
             ((TreeVFlowNode)ParentTreeNode)?.RefreshHeight();
             
-            RootTreeNode.ResumeLayoutTree();
+            ResumeLayoutNode();
+        }
+        
+        private void RefreshMargin(TreeVFlowNode node)
+        {
+            var mMargin = node.Margin;
+            mMargin.Left = (node.TreeLevel * node.LevelIndent);
+            node.Margin = mMargin;
+        }
+        
+        private void RefreshWidth(TreeVFlowNode node)
+        {
+            if (node.ParentTreeNode != null)
+            {
+                node.Width = ((TreeVFlowNode)node.ParentTreeNode).Width - node.Margin.Horizontal - 9;
+            }
+
+            node.Controls.Cast<Control>()
+                .ToList().ForEach(v => v.Width = node.Width - v.Margin.Horizontal);// (node.LevelIndent*node.TreeLevel));
         }
 
         public override string ToString()

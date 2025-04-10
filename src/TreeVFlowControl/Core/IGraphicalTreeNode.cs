@@ -31,6 +31,8 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler ContentNodeAdded;
         event TreeNodeEventHandler ContentNodeRemoved;
         event TreeNodeEventHandler TreeNodeRefresh;
+        event TreeNodeEventHandler ResizeHeight;
+        event TreeNodeEventHandler ResizeWidth;
         
         String Text { get; set; }
         Color BackColor { get; set; }
@@ -38,10 +40,10 @@ namespace TreeVFlowControl.Core
         Control Header { get; set; }
         Control Footer { get; set; }
         
-        void SuspendLayoutTree();
-        void SuspendLayoutTreeNode();
-        void ResumeLayoutTree();
-        void ResumeLayoutTreeNode();
+        void SuspendLayoutDeep();
+        void SuspendLayoutNode();
+        void ResumeLayoutDeep();
+        void ResumeLayoutNode();
         
         IGraphicalTreeNode ParentTreeNode { get;}
         IGraphicalTreeNode RootTreeNode { get; }
