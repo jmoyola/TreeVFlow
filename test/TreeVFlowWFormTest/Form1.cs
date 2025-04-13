@@ -66,7 +66,7 @@ namespace TreeVFlowWFormTest
         {
             Label headerLabel = args.TreeNode.Header as Label;
             if(headerLabel!=null)
-                headerLabel.Text= $"{(args.TreeNode.IsExpanded?"+ ":"- ")} {args.TreeNode.Text} ({args.TreeNode.TreeNodes.Count + args.TreeNode.TreeContent.Count})";
+                headerLabel.Text= $"{(args.TreeNode.IsExpanded?"- ":"+ ")} {args.TreeNode.Text} ({args.TreeNode.TreeNodes.Count + args.TreeNode.TreeContent.Count})";
         }
 
 
@@ -117,25 +117,25 @@ namespace TreeVFlowWFormTest
         private void button7_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null && _currentTreeNode.Header!=null)
-                _currentTreeNode.Header.Visible=!_currentTreeNode.Header.Visible;
+                _currentTreeNode.Header.Visible= (!_currentTreeNode.Header.Visible);
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null && _currentTreeNode.Footer!=null)
-                _currentTreeNode.Footer.Visible=!_currentTreeNode.Footer.Visible;
+                _currentTreeNode.Footer.Visible= (!_currentTreeNode.Footer.Visible);
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
             if(_currentContentNode!=null)
-                _currentContentNode.Visible=!_currentContentNode.Visible;
+                _currentContentNode.Visible= (!_currentContentNode.Visible);
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null)
-                _currentTreeNode.Visible=!_currentTreeNode.Visible;
+                _currentTreeNode.Visible= (!_currentTreeNode.Visible);
         }
 
         private void button11_Click(object sender, EventArgs e)

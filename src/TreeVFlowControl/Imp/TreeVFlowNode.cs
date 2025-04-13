@@ -213,7 +213,6 @@ namespace TreeVFlowControl.Imp
 
         private void SubControlAdded(Control control)
         {
-            RefreshHeight();
             control.Left = LevelIndent * TreeLevel;
             control.Width = Width;
             control.Click += ContentClick;
@@ -228,7 +227,6 @@ namespace TreeVFlowControl.Imp
             control.DoubleClick -= ContentDoubleClick;
             //control.SizeChanged -= ControlResize;
             control.VisibleChanged -= ControlResize;
-            RefreshHeight();
         }
         
         public void AddContent(Control content)
@@ -307,6 +305,7 @@ namespace TreeVFlowControl.Imp
                 var newTreeVFlowNode = newTreeNode as TreeVFlowNode;
                 if (newTreeVFlowNode == null) throw new ArgumentNullException(nameof(newTreeNode));
 
+                SuspendLayout();
                 newTreeVFlowNode.SuspendLayout();
                 newTreeVFlowNode.Visible = true;
                 newTreeVFlowNode.LevelIndent = LevelIndent;
@@ -324,7 +323,7 @@ namespace TreeVFlowControl.Imp
                 
                 
                 newTreeVFlowNode.ResumeLayout();
-
+                ResumeLayout();
                 return newTreeVFlowNode;
             }
             finally
@@ -430,7 +429,7 @@ namespace TreeVFlowControl.Imp
 
                 _isExpanded = expand;
 
-                RootTreeNode.SuspendLayoutDeep();
+                //RootTreeNode.SuspendLayoutDeep();
                 var controls = Controls.Cast<Control>().ToList();
                 for (int i = 0; i < controls.Count; i++)
                     if (i > (_header == null ? -1 : 0) && i < controls.Count - (_footer == null ? 0 : 1))
@@ -438,7 +437,7 @@ namespace TreeVFlowControl.Imp
 
                 RefreshHeight();
 
-                RootTreeNode.ResumeLayoutDeep();
+                //RootTreeNode.ResumeLayoutDeep();
 
                 if (_isExpanded)
                     OnTreeNodeExpanded(new TreeNodeEventArgs(this));
@@ -470,11 +469,11 @@ namespace TreeVFlowControl.Imp
             //    _lastWidth = Width;
             //}
             
-            if (_lastHeight != Height)
-            {
-                OnResizeHeight(_lastHeight, Height);
-                _lastHeight = Height;
-            }
+            //if (_lastHeight != Height)
+            //{
+            //    OnResizeHeight(_lastHeight, Height);
+            //    _lastHeight = Height;
+            //}
 
             base.OnResize(eventargs);
         }
@@ -561,10 +560,10 @@ namespace TreeVFlowControl.Imp
         private void RefreshHeight()
         {
             SuspendLayoutNode();
-            Height =  (!_isExpanded?ControlHeight(_header) + Margin.Vertical:
+            Height =  (!_isExpanded?ControlHeight(_header):
                 Controls.Cast<Control>()
                     .ToList()
-                    .Sum(v => ControlHeight(v) + v.Margin.Vertical));
+                    .Sum(v => ControlHeight(v)));
             
             ((TreeVFlowNode)ParentTreeNode)?.RefreshHeight();
             

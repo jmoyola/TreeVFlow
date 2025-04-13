@@ -9,6 +9,7 @@ namespace TreeVFlowControl.Imp
         public TreeVFlow()
         {
             Init();
+            //JoinAllEvents(this);
             TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
 

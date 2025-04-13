@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using HierarchicalTree.Properties;
 using TreeVFlowControl.Core;
@@ -10,18 +12,19 @@ namespace TreeVFlowWFormTest;
 
 public class GroupItemNode:TreeVFlowNode
 {
-    protected static Bitmap _arrowUpImage;
-    protected static Bitmap _arrowDownImage;
-    protected static Bitmap _padLockImage;
+    protected readonly static Bitmap ArrowUpImage;
+    protected readonly static Bitmap ArrowDownImage;
+    protected readonly static Bitmap PadLockImage;
 
     static GroupItemNode()
     {
-        _arrowUpImage = new Bitmap(Image.FromStream(
-            Assembly.GetCallingAssembly().GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_up_32.png")));
-        _arrowDownImage = new Bitmap(Image.FromStream(
-                Assembly.GetCallingAssembly().GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_down_32.png")));
-        _padLockImage = new Bitmap(Image.FromStream(
-                Assembly.GetCallingAssembly().GetManifestResourceStream("TreeVFlowWFormTest.Resources.pad_lock_32.png")));
+        Assembly ass = Assembly.GetAssembly(typeof(GroupItemNode));
+        ArrowUpImage = new Bitmap(Image.FromStream(
+            ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_up_32.png") ?? throw new InvalidOperationException()));
+        ArrowDownImage = new Bitmap(Image.FromStream(
+                ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_down_32.png") ?? throw new InvalidOperationException()));
+        PadLockImage = new Bitmap(Image.FromStream(
+                ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.pad_lock_32.png") ?? throw new InvalidOperationException()));
     }
     
     public GroupItemNode()
@@ -42,7 +45,7 @@ public class GroupItemNode:TreeVFlowNode
         
         btn.Click +=(_,_)=> ToggleItems();
         TextChanged +=(_,_)=> btn.Text=Text;
-        btn.Image = _arrowUpImage;
+        btn.Image = ArrowUpImage;
         btn.ImageAlign = ContentAlignment.MiddleLeft;
         
         this.Footer = new Label(){Height = 30, Text = "Show More", Visible = false};
@@ -50,21 +53,11 @@ public class GroupItemNode:TreeVFlowNode
 
     protected override void OnTreeNodeExpanded(TreeNodeEventArgs args)
     {
-        ((Button)Header).Image = _arrowUpImage;
+        ((Button)Header).Image = ArrowUpImage;
     }
 
     protected override void OnTreeNodeCollapsed(TreeNodeEventArgs args)
     {
-        ((Button)Header).Image = _arrowDownImage;
-    }
-
-    public override void DisableItem()
-    {
-        base.DisableItem();
-    }
-
-    public override void EnableItem()
-    {
-        base.EnableItem();
+        ((Button)Header).Image = ArrowDownImage;
     }
 }
