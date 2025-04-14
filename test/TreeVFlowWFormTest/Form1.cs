@@ -19,7 +19,10 @@ namespace TreeVFlowWFormTest
             InitializeComponent();
             _treeVFlowNode1.AutoSize = false;
             _treeVFlowNode1.LevelIndent = 5;
-            
+            _treeVFlowNode1.Left = 0;
+            _treeVFlowNode1.Top = 0;
+            _treeVFlowNode1.Height = 60;
+            splitContainer1.Panel1.Resize += (sender, args) => _treeVFlowNode1.Width = splitContainer1.Panel1.Width; 
             
             _currentTreeNode = _treeVFlowNode1;
             JoinAllEvents(_treeVFlowNode1);
@@ -88,7 +91,7 @@ namespace TreeVFlowWFormTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _currentTreeNode?.RemoveTreeNode();
+            _currentTreeNode?.ParentTreeNode?.RemoveTreeNode(_currentTreeNode);
         }
 
         private void button3_Click(object sender, EventArgs e)

@@ -40,11 +40,6 @@ namespace TreeVFlowControl.Core
         Control Header { get; set; }
         Control Footer { get; set; }
         
-        void SuspendLayoutDeep();
-        void SuspendLayoutNode();
-        void ResumeLayoutDeep();
-        void ResumeLayoutNode();
-        
         IGraphicalTreeNode ParentTreeNode { get;}
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
@@ -52,9 +47,11 @@ namespace TreeVFlowControl.Core
         void ClearTreeNodes();
         IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
         void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
-        void RemoveTreeNode();
+        
         IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate);
         IEnumerable<IGraphicalTreeNode> TreeDeepWhere(Func<IGraphicalTreeNode, bool> predicate);
+        Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);
+        IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
         
         void AddContent(Control content);
         void RemoveContent(Control content);
@@ -65,7 +62,6 @@ namespace TreeVFlowControl.Core
         void ToggleItems();
         void Collapse();
         void Expand();
-        Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);
-        IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
+
     }
 }

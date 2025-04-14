@@ -15,8 +15,9 @@ namespace TreeVFlowControl.Imp
 
         private void Init()
         {
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;   
+            AutoSize = false;
+            AutoScroll = true;
+            Expand();
         }
         
         private void JoinAllEvents(IGraphicalTreeNode node)
