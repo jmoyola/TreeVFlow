@@ -111,7 +111,7 @@ namespace TreeVFlowControl.Imp
         public IGraphicalTreeNode RootTreeNode=>ParentTreeNode==null?this:ParentTreeNode.RootTreeNode;
         public int TreeLevel => ParentTreeNode == null ? 0 : ParentTreeNode.TreeLevel + 1;
         
-        private void ContentClick(object sender, EventArgs args)
+        private void SubControl_Click(object sender, EventArgs args)
         {
             if (sender == _header)
                 OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
@@ -121,7 +121,7 @@ namespace TreeVFlowControl.Imp
                 OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
 
         }
-        private void ContentDoubleClick(object sender, EventArgs args)
+        private void SubControl_DoubleClick(object sender, EventArgs args)
         {
             if (sender == _header)
                 OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
@@ -215,14 +215,29 @@ namespace TreeVFlowControl.Imp
         {
             control.Left = LevelIndent * TreeLevel;
             control.Width = Width;
-            control.Click += ContentClick;
-            control.DoubleClick += ContentDoubleClick;
+            control.Click += SubControl_Click;
+            control.DoubleClick += SubControl_DoubleClick;
         }
         
         private void SubControlRemoved(Control control)
         {
-            control.Click -= ContentClick;
-            control.DoubleClick -= ContentDoubleClick;
+            control.Click -= SubControl_Click;
+            control.DoubleClick -= SubControl_DoubleClick;
+        }
+        
+        public IList<Control> TreeContent=>Controls
+            .Cast<Control>()
+            .Where(v=>!(v is TreeVFlowNode || v==Header || v==Footer))
+            .ToList();
+        
+        public IList<IGraphicalTreeNode> TreeNodes=>Controls
+            .Cast<Control>()
+            .OfType<IGraphicalTreeNode>()
+            .ToList();
+
+        public IGraphicalTreeNode AddTreeNode()
+        {
+            return AddTreeNode(new TreeVFlowNode());
         }
         
         public void AddContent(Control content)
@@ -305,21 +320,6 @@ namespace TreeVFlowControl.Imp
             {
                 TreeNodeLock.Release();
             }
-        }
-        
-        public IList<Control> TreeContent=>Controls
-            .Cast<Control>()
-            .Where(v=>!(v is TreeVFlowNode || v==Header || v==Footer))
-            .ToList();
-        
-        public IList<IGraphicalTreeNode> TreeNodes=>Controls
-            .Cast<Control>()
-            .OfType<IGraphicalTreeNode>()
-            .ToList();
-
-        public IGraphicalTreeNode AddTreeNode()
-        {
-            return AddTreeNode(new TreeVFlowNode());
         }
         
         public IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode)
