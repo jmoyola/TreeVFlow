@@ -5,59 +5,38 @@ using System.Windows.Forms;
 
 namespace TreeVFlowControl.Core
 {
-    public delegate void TreeNodeEventHandler(object sender, TreeNodeEventArgs args);
-    public class TreeNodeEventArgs : EventArgs
+    public delegate void TreeNodeEventHandler<T>(object sender, TreeNodeEventArgs<T> args);
+    public class TreeNodeEventArgs<T> : EventArgs
     {
-        public TreeNodeEventArgs(IGraphicalTreeNode treeNode, Control content=null)
+        public TreeNodeEventArgs(IGraphicalTreeNode<T> treeNode, Control content=null)
         {
             TreeNode = treeNode;
             Content=content;
         }
-        public IGraphicalTreeNode TreeNode { get; internal set; }
+        public IGraphicalTreeNode<T> TreeNode { get; internal set; }
         public Control Content { get; internal set; }
     }
-    public interface IGraphicalTreeNode
+    public interface IGraphicalTreeNode<T>:ITreeNode<T>
     {
-        event TreeNodeEventHandler TreeNodeHeaderClick;
-        event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
-        event TreeNodeEventHandler TreeNodeFooterClick;
-        event TreeNodeEventHandler TreeNodeFooterDoubleClick;
-        event TreeNodeEventHandler ContentNodeClick;
-        event TreeNodeEventHandler ContentNodeDoubleClick;
-        event TreeNodeEventHandler TreeNodeCollapsed;
-        event TreeNodeEventHandler TreeNodeExpanded;
-        event TreeNodeEventHandler TreeNodeAdded;
-        event TreeNodeEventHandler TreeNodeRemoved;
-        event TreeNodeEventHandler ContentNodeAdded;
-        event TreeNodeEventHandler ContentNodeRemoved;
-        event TreeNodeEventHandler TreeNodeRefresh;
-        event TreeNodeEventHandler ResizeHeight;
-        event TreeNodeEventHandler ResizeWidth;
-        
-        String Text { get; set; }
-        Color BackColor { get; set; }
+        event TreeNodeEventHandler<T> TreeNodeHeaderClick;
+        event TreeNodeEventHandler<T> TreeNodeHeaderDoubleClick;
+        event TreeNodeEventHandler<T> TreeNodeFooterClick;
+        event TreeNodeEventHandler<T> TreeNodeFooterDoubleClick;
+        event TreeNodeEventHandler<T> ContentNodeClick;
+        event TreeNodeEventHandler<T> ContentNodeDoubleClick;
+        event TreeNodeEventHandler<T> TreeNodeCollapsed;
+        event TreeNodeEventHandler<T> TreeNodeExpanded;
+        event TreeNodeEventHandler<T> TreeNodeAdded;
+        event TreeNodeEventHandler<T> TreeNodeRemoved;
+        event TreeNodeEventHandler<T> ContentNodeAdded;
+        event TreeNodeEventHandler<T> ContentNodeRemoved;
+        event TreeNodeEventHandler<T> TreeNodeRefresh;
+        event TreeNodeEventHandler<T> ResizeHeight;
+        event TreeNodeEventHandler<T> ResizeWidth;
 
-        Control Header { get; set; }
-        Control Footer { get; set; }
+        void Disable();
+        void Enable();
         
-        IGraphicalTreeNode ParentTreeNode { get;}
-        IGraphicalTreeNode RootTreeNode { get; }
-        int TreeLevel { get; }
-        IList<IGraphicalTreeNode> TreeNodes { get; }
-        void ClearTreeNodes();
-        IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
-        void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
-        
-        IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate);
-        IEnumerable<IGraphicalTreeNode> TreeDeepWhere(Func<IGraphicalTreeNode, bool> predicate);
-        Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);
-        IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
-        
-        void AddContent(Control content);
-        void RemoveContent(Control content);
-        void ClearContent();
-        IList<Control> TreeContent { get; }
-        void ClearAll();
         bool IsExpanded { get; }
         void ToggleItems();
         void Collapse();

@@ -8,14 +8,10 @@ using TreeVFlowControl.Core;
 
 namespace TreeVFlowControl.Imp
 {
-    public class TreeVFlowNode: TableLayoutPanel, IGraphicalTreeNode
+    public class TreeVFlowNode<T>: TableLayoutPanel, IGraphicalTreeNode<T>
     {
         private readonly SemaphoreSlim _nodeLock = new (1, 1);
         
-        private int _suspendLayoutCount;
-        
-        private int _lastHeight;
-        private int _lastWidth;
         public int LevelIndent { get; set; } = 10;
         private Control _header;
         private Control _footer;
@@ -38,7 +34,7 @@ namespace TreeVFlowControl.Imp
             DoubleBuffered = true;
         }
         
-        private SemaphoreSlim TreeNodeLock=> ((TreeVFlowNode)RootTreeNode)._nodeLock;
+        private SemaphoreSlim TreeNodeLock=> ((TreeVFlowNode<T>)RootTreeNode)._nodeLock;
         
         public Control Header
         {
@@ -107,18 +103,18 @@ namespace TreeVFlowControl.Imp
             }
         }
 
-        public IGraphicalTreeNode ParentTreeNode => Parent as TreeVFlowNode;
-        public IGraphicalTreeNode RootTreeNode=>ParentTreeNode==null?this:ParentTreeNode.RootTreeNode;
+        public ITreeNode<T> ParentTreeNode => Parent as TreeVFlowNode<T>;
+        public ITreeNode<T> RootTreeNode=>ParentTreeNode==null?this:ParentTreeNode.RootTreeNode;
         public int TreeLevel => ParentTreeNode == null ? 0 : ParentTreeNode.TreeLevel + 1;
         
         private void SubControl_Click(object sender, EventArgs args)
         {
             if (sender == _header)
-                OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
+                OnTreeNodeHeaderClick(new TreeNodeEventArgs<T>(this, (Control)sender));
             else if (sender == _footer)
-                OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
+                OnTreeNodeHeaderClick(new TreeNodeEventArgs<T>(this, (Control)sender));
             else
-                OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
+                OnContentNodeClick(new TreeNodeEventArgs<T>(this, (Control)sender));
 
         }
         private void SubControl_DoubleClick(object sender, EventArgs args)
@@ -132,79 +128,79 @@ namespace TreeVFlowControl.Imp
         }
 
 #region Events
-        public event TreeNodeEventHandler TreeNodeHeaderClick;
-        public event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
-        public event TreeNodeEventHandler TreeNodeFooterClick;
-        public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
-        public event TreeNodeEventHandler ContentNodeClick;
-        public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeCollapsed;
-        public event TreeNodeEventHandler TreeNodeExpanded;
-        public event TreeNodeEventHandler TreeNodeAdded;
-        public event TreeNodeEventHandler TreeNodeRemoved;
-        public event TreeNodeEventHandler ContentNodeAdded;
-        public event TreeNodeEventHandler ContentNodeRemoved;
-        public event TreeNodeEventHandler TreeNodeRefresh;
-        public event TreeNodeEventHandler ResizeHeight;
-        public event TreeNodeEventHandler ResizeWidth;
+        public event TreeNodeEventHandler<T> TreeNodeHeaderClick;
+        public event TreeNodeEventHandler<T> TreeNodeHeaderDoubleClick;
+        public event TreeNodeEventHandler<T> TreeNodeFooterClick;
+        public event TreeNodeEventHandler<T> TreeNodeFooterDoubleClick;
+        public event TreeNodeEventHandler<T> ContentNodeClick;
+        public event TreeNodeEventHandler<T> ContentNodeDoubleClick;
+        public event TreeNodeEventHandler<T> TreeNodeCollapsed;
+        public event TreeNodeEventHandler<T> TreeNodeExpanded;
+        public event TreeNodeEventHandler<T> TreeNodeAdded;
+        public event TreeNodeEventHandler<T> TreeNodeRemoved;
+        public event TreeNodeEventHandler<T> ContentNodeAdded;
+        public event TreeNodeEventHandler<T> ContentNodeRemoved;
+        public event TreeNodeEventHandler<T> TreeNodeRefresh;
+        public event TreeNodeEventHandler<T> ResizeHeight;
+        public event TreeNodeEventHandler<T> ResizeWidth;
         
-        protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs<T> args)
         {
             TreeNodeHeaderClick?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeHeaderDoubleClick(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeHeaderDoubleClick(TreeNodeEventArgs<T> args)
         {
             TreeNodeHeaderDoubleClick?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeFooterClick(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeFooterClick(TreeNodeEventArgs<T> args)
         {
             TreeNodeFooterClick?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeFooterDoubleClick(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeFooterDoubleClick(TreeNodeEventArgs<T> args)
         {
             TreeNodeFooterDoubleClick?.Invoke(this, args);
         }      
-        protected virtual void OnTreeNodeExpanded(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeExpanded(TreeNodeEventArgs<T> args)
         {
             TreeNodeExpanded?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeCollapsed(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeCollapsed(TreeNodeEventArgs<T> args)
         {
             TreeNodeCollapsed?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeAdded(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeAdded(TreeNodeEventArgs<T> args)
         {
             TreeNodeAdded?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeRemoved(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeRemoved(TreeNodeEventArgs<T> args)
         {
             TreeNodeRemoved?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeRefresh(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeRefresh(TreeNodeEventArgs<T> args)
         {
             TreeNodeRefresh?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeClick(TreeNodeEventArgs args)
+        protected virtual void OnContentNodeClick(TreeNodeEventArgs<T> args)
         {
             ContentNodeClick?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeDoubleClick(TreeNodeEventArgs args)
+        protected virtual void OnContentNodeDoubleClick(TreeNodeEventArgs<T> args)
         {
             ContentNodeDoubleClick?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeAdded(TreeNodeEventArgs args)
+        protected virtual void OnContentNodeAdded(TreeNodeEventArgs<T> args)
         {
             ContentNodeAdded?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeRemoved(TreeNodeEventArgs args)
+        protected virtual void OnContentNodeRemoved(TreeNodeEventArgs<T> args)
         {
             ContentNodeRemoved?.Invoke(this, args);
         }
-        protected virtual void OnResizeWidth(TreeNodeEventArgs args)
+        protected virtual void OnResizeWidth(TreeNodeEventArgs<T> args)
         {
             ResizeWidth?.Invoke(this, args);
         }
-        protected virtual void OnResizeHeight(TreeNodeEventArgs args)
+        protected virtual void OnResizeHeight(TreeNodeEventArgs<T> args)
         {
             ResizeHeight?.Invoke(this, args);
         }
@@ -225,7 +221,7 @@ namespace TreeVFlowControl.Imp
             control.DoubleClick -= SubControl_DoubleClick;
         }
         
-        public IList<Control> TreeContent=>Controls
+        public IList<INode<T>> TreeContentNodes=>Controls
             .Cast<Control>()
             .Where(v=>!(v is TreeVFlowNode || v==Header || v==Footer))
             .ToList();
