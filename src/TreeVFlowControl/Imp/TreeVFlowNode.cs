@@ -12,10 +12,6 @@ namespace TreeVFlowControl.Imp
     {
         private readonly SemaphoreSlim _nodeLock = new (1, 1);
         
-        private int _suspendLayoutCount;
-        
-        private int _lastHeight;
-        private int _lastWidth;
         public int LevelIndent { get; set; } = 10;
         private Control _header;
         private Control _footer;

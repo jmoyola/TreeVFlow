@@ -8,14 +8,15 @@ namespace TreeVFlowControl.Core
     public delegate void TreeNodeEventHandler(object sender, TreeNodeEventArgs args);
     public class TreeNodeEventArgs : EventArgs
     {
-        public TreeNodeEventArgs(IGraphicalTreeNode treeNode, Control content=null)
+        public TreeNodeEventArgs(IGraphicalTreeNode treeNode)
         {
             TreeNode = treeNode;
-            Content=content;
         }
         public IGraphicalTreeNode TreeNode { get; internal set; }
-        public Control Content { get; internal set; }
     }
+
+    public enum LoadingStatus { NotLoaded, PartiallyLoaded, Loaded}
+    public enum UpdateStatus { Node, Updated }
     public interface IGraphicalTreeNode
     {
         event TreeNodeEventHandler TreeNodeHeaderClick;
