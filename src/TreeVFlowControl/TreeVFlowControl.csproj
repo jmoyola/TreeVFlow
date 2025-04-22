@@ -11,5 +11,10 @@
     <ItemGroup>
       <Reference Include="System.Windows.Forms" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Imp\GraphicalTreeNode.cs">
+        <SubType>Component</SubType>
+      </Compile>
+    </ItemGroup>
 
 </Project>
