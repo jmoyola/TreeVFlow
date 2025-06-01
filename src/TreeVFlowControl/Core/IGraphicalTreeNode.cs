@@ -36,10 +36,9 @@ namespace TreeVFlowControl.Core
         
         String Text { get; set; }
         Color BackColor { get; set; }
-
+        bool Visible { get; set; }
         Control Header { get; set; }
         Control Footer { get; set; }
-        
         IGraphicalTreeNode ParentTreeNode { get;}
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
@@ -47,7 +46,6 @@ namespace TreeVFlowControl.Core
         void ClearTreeNodes();
         IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
         void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
-        
         IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate);
         IEnumerable<IGraphicalTreeNode> TreeDeepWhere(Func<IGraphicalTreeNode, bool> predicate);
         Control ContentDeepFirstOrDefault(Func<Control, bool> predicate);

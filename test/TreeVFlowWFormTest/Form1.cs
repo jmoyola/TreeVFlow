@@ -17,15 +17,16 @@ namespace TreeVFlowWFormTest
         public Form1()
         {
             InitializeComponent();
-            _treeVFlowNode1.AutoSize = false;
-            _treeVFlowNode1.LevelIndent = 5;
-            _treeVFlowNode1.Left = 0;
-            _treeVFlowNode1.Top = 0;
-            _treeVFlowNode1.Height = 60;
-            splitContainer1.Panel1.Resize += (sender, args) => _treeVFlowNode1.Width = splitContainer1.Panel1.Width; 
+            _treeVFlowControlNode1.AutoSize = true;
+            _treeVFlowControlNode1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            _treeVFlowControlNode1.LevelIndent = 5;
+            _treeVFlowControlNode1.Left = 0;
+            _treeVFlowControlNode1.Top = 0;
+            _treeVFlowControlNode1.Height = 60;
+            splitContainer1.Panel1.Resize += (sender, args) => _treeVFlowControlNode1.Width = splitContainer1.Panel1.Width; 
             
-            _currentTreeNode = _treeVFlowNode1;
-            JoinAllEvents(_treeVFlowNode1);
+            _currentTreeNode = _treeVFlowControlNode1;
+            JoinAllEvents(_treeVFlowControlNode1);
         }
 
         private void JoinAllEvents(TreeVFlowNode node)
@@ -107,14 +108,14 @@ namespace TreeVFlowWFormTest
         private void button5_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null)
-                _treeVFlowNode1.ScrollShowTreeNode(_currentTreeNode);
+                _treeVFlowControlNode1.ScrollShowTreeNode(_currentTreeNode);
             
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             if(_currentContentNode!=null)
-                _treeVFlowNode1.ScrollShowContentNode(_currentContentNode);
+                _treeVFlowControlNode1.ScrollShowContentNode(_currentContentNode);
         }
 
         private void button7_Click(object sender, EventArgs e)

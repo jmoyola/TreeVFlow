@@ -6,7 +6,7 @@ namespace TreeVFlowWFormTest
     {
 
         #region Windows Form Designer generated code
-        private TreeVFlowControl.Imp.TreeVFlow _treeVFlowNode1;
+        private TreeVFlowControl.Imp.TreeVFlowControl _treeVFlowControlNode1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -20,7 +20,7 @@ namespace TreeVFlowWFormTest
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this._treeVFlowNode1 = new TreeVFlowControl.Imp.TreeVFlow();
+            this._treeVFlowControlNode1 = new TreeVFlowControl.Imp.TreeVFlowControl();
             this.button11 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
@@ -51,7 +51,7 @@ namespace TreeVFlowWFormTest
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.AutoScroll = true;
-            this.splitContainer1.Panel1.Controls.Add(this._treeVFlowNode1);
+            this.splitContainer1.Panel1.Controls.Add(this._treeVFlowControlNode1);
             // 
             // splitContainer1.Panel2
             // 
@@ -76,21 +76,21 @@ namespace TreeVFlowWFormTest
             // 
             // _treeVFlowNode1
             // 
-            this._treeVFlowNode1.AutoScroll = false;
-            this._treeVFlowNode1.AutoSize = true;
-            this._treeVFlowNode1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this._treeVFlowNode1.BackColor = System.Drawing.Color.Azure;
-            this._treeVFlowNode1.ColumnCount = 1;
-            this._treeVFlowNode1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 341F));
-            this._treeVFlowNode1.Footer = null;
-            this._treeVFlowNode1.Header = null;
-            this._treeVFlowNode1.LevelIndent = 5;
-            this._treeVFlowNode1.Location = new System.Drawing.Point(0, 0);
-            this._treeVFlowNode1.Name = "_treeVFlowNode1";
-            this._treeVFlowNode1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this._treeVFlowNode1.Size = new System.Drawing.Size(341, 0);
-            this._treeVFlowNode1.TabIndex = 0;
-            this._treeVFlowNode1.Text = "Root";
+            this._treeVFlowControlNode1.AutoScroll = false;
+            this._treeVFlowControlNode1.AutoSize = true;
+            this._treeVFlowControlNode1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._treeVFlowControlNode1.BackColor = System.Drawing.Color.Azure;
+            this._treeVFlowControlNode1.ColumnCount = 1;
+            this._treeVFlowControlNode1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 341F));
+            this._treeVFlowControlNode1.Footer = null;
+            this._treeVFlowControlNode1.Header = null;
+            this._treeVFlowControlNode1.LevelIndent = 5;
+            this._treeVFlowControlNode1.Location = new System.Drawing.Point(0, 0);
+            this._treeVFlowControlNode1.Name = "_treeVFlowControlNode1";
+            this._treeVFlowControlNode1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this._treeVFlowControlNode1.Size = new System.Drawing.Size(341, 0);
+            this._treeVFlowControlNode1.TabIndex = 0;
+            this._treeVFlowControlNode1.Text = "Root";
             // 
             // button11
             // 

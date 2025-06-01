@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using HierarchicalTree.Properties;
 using TreeVFlowControl.Core;
 using TreeVFlowControl.Imp;
 
@@ -12,19 +9,15 @@ namespace TreeVFlowWFormTest;
 
 public class GroupItemNode:TreeVFlowNode
 {
-    protected readonly static Bitmap ArrowUpImage;
-    protected readonly static Bitmap ArrowDownImage;
-    protected readonly static Bitmap PadLockImage;
+    private static readonly Bitmap ArrowUpImage = GetResourceBitMap("TreeVFlowWFormTest.Resources.arrow_up_32.png");
+    private static readonly Bitmap ArrowDownImage = GetResourceBitMap("TreeVFlowWFormTest.Resources.arrow_down_32.png");
+    private static readonly Bitmap PadLockImage=GetResourceBitMap("TreeVFlowWFormTest.Resources.pad_lock_32.png");
 
-    static GroupItemNode()
+    private static Bitmap GetResourceBitMap(string resourcePath)
     {
         Assembly ass = Assembly.GetAssembly(typeof(GroupItemNode));
-        ArrowUpImage = new Bitmap(Image.FromStream(
-            ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_up_32.png") ?? throw new InvalidOperationException()));
-        ArrowDownImage = new Bitmap(Image.FromStream(
-                ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.arrow_down_32.png") ?? throw new InvalidOperationException()));
-        PadLockImage = new Bitmap(Image.FromStream(
-                ass.GetManifestResourceStream("TreeVFlowWFormTest.Resources.pad_lock_32.png") ?? throw new InvalidOperationException()));
+        return new Bitmap(Image.FromStream(
+            ass.GetManifestResourceStream(resourcePath) ?? throw new InvalidOperationException()));
     }
     
     public GroupItemNode()

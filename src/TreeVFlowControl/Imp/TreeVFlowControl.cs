@@ -4,18 +4,18 @@ using System.Windows.Forms;
 
 namespace TreeVFlowControl.Imp
 {
-    public class TreeVFlow:TreeVFlowNode
+    public class TreeVFlowControl:TreeVFlowNode
     {
-        public TreeVFlow()
+        public TreeVFlowControl()
         {
             Init();
-            //JoinAllEvents(this);
             TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
 
         private void Init()
         {
-            AutoSize = false;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             AutoScroll = true;
             Expand();
         }
