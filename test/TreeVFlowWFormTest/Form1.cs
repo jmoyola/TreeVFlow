@@ -22,7 +22,6 @@ namespace TreeVFlowWFormTest
             _treeVFlowControlNode1.LevelIndent = 5;
             _treeVFlowControlNode1.Left = 0;
             _treeVFlowControlNode1.Top = 0;
-            _treeVFlowControlNode1.Height = 60;
             splitContainer1.Panel1.Resize += (sender, args) => _treeVFlowControlNode1.Width = splitContainer1.Panel1.Width; 
             
             _currentTreeNode = _treeVFlowControlNode1;

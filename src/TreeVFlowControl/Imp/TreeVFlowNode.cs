@@ -329,8 +329,8 @@ namespace TreeVFlowControl.Imp
                 Controls.Add(newTreeVFlowNode);
                 Controls.SetChildIndex(newTreeVFlowNode, Controls.Count - (_footer == null ? 1 : 2));
                 
-                RefreshWidth(newTreeVFlowNode);
-                RefreshMargin(newTreeVFlowNode);
+                newTreeVFlowNode.SetNodeWidth();
+                newTreeVFlowNode.SetNodeMargin();
                 
                 newTreeVFlowNode.ResumeLayout();
                 ResumeLayout();
@@ -476,44 +476,31 @@ namespace TreeVFlowControl.Imp
             OnTreeNodeRefresh(new TreeNodeEventArgs(this));
         }
         
-        public virtual void OnResizeWidth(int lastWidth, int newWidth)
+        protected void SetNodeMargin()
         {
-            if (this != RootTreeNode)
-                return;
-            
+            var mMargin = Margin;
+            mMargin.Left = (TreeLevel * LevelIndent);
+            Margin = mMargin;
+        }
+        
+        protected void SetNodeWidth()
+        {
+            if (ParentTreeNode != null)
+                Width = ((TreeVFlowNode)ParentTreeNode).ClientSize.Width;
+
+            Controls.Cast<Control>()
+                .ToList().ForEach(v => v.Width = ClientSize.Width-Margin.Horizontal);
+        }
+        
+        protected void RefreshNodeWith()
+        {
             SuspendLayout();
+            SetNodeWidth();
+            TreeNodes.ToList().ForEach(v=>((TreeVFlowNode)v).RefreshNodeWith());
             
-            RefreshWithNode(this);
-
             ResumeLayout();
-            
-            OnResizeWidth(new TreeNodeEventArgs(this));
-        }
-        private void RefreshWithNode(TreeVFlowNode node)
-        {
-            RefreshMargin(node);
-            RefreshWidth(node);
-            TreeNodes.ToList().ForEach(v=>RefreshWithNode(v as TreeVFlowNode));
         }
         
-        private static void RefreshMargin(TreeVFlowNode node)
-        {
-            var mMargin = node.Margin;
-            mMargin.Left = (node.TreeLevel * node.LevelIndent);
-            node.Margin = mMargin;
-        }
-        
-        private static void RefreshWidth(TreeVFlowNode node)
-        {
-            if (node.ParentTreeNode != null)
-            {
-                node.Width = ((TreeVFlowNode)node.ParentTreeNode).Width - node.Margin.Horizontal - 9;
-            }
-
-            node.Controls.Cast<Control>()
-                .ToList().ForEach(v => v.Width = node.Width - v.Margin.Horizontal);
-        }
-
         public override string ToString()
         {
             return Text;

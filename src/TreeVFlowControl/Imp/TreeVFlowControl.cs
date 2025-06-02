@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TreeVFlowControl.Core;
 using System.Windows.Forms;
 
@@ -18,6 +19,12 @@ namespace TreeVFlowControl.Imp
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             AutoScroll = true;
             Expand();
+        }
+        
+        protected override void OnResize(EventArgs eventargs)
+        {
+            RefreshNodeWith();
+            base.OnResize(eventargs);
         }
         
         private void JoinAllEvents(IGraphicalTreeNode node)
