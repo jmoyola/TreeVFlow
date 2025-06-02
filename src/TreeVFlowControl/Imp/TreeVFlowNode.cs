@@ -329,8 +329,7 @@ namespace TreeVFlowControl.Imp
                 Controls.Add(newTreeVFlowNode);
                 Controls.SetChildIndex(newTreeVFlowNode, Controls.Count - (_footer == null ? 1 : 2));
                 
-                newTreeVFlowNode.SetNodeWidth();
-                newTreeVFlowNode.SetNodeMargin();
+                newTreeVFlowNode.RefreshNodeLayout();
                 
                 newTreeVFlowNode.ResumeLayout();
                 ResumeLayout();
@@ -475,30 +474,37 @@ namespace TreeVFlowControl.Imp
         {
             OnTreeNodeRefresh(new TreeNodeEventArgs(this));
         }
+
+        protected void RefreshNodeLayout(bool deep=false)
+        {
+            SuspendLayout();
+            RefreshNodeMargin();
+            RefreshNodeWidth();
+            if(deep)
+                TreeNodes.ToList().ForEach(v=>((TreeVFlowNode)v).RefreshNodeLayout(true));
+            ResumeLayout();
+        }
         
-        protected void SetNodeMargin()
+        protected void RefreshNodeMargin()
         {
             var mMargin = Margin;
             mMargin.Left = (TreeLevel * LevelIndent);
             Margin = mMargin;
         }
         
-        protected void SetNodeWidth()
+        protected void RefreshNodeWidth()
         {
             if (ParentTreeNode != null)
-                Width = ((TreeVFlowNode)ParentTreeNode).ClientSize.Width;
+                Width = ((TreeVFlowNode)ParentTreeNode).ClientSize.Width - 10 - Margin.Left
+                   - (ParentTreeNode==RootTreeNode?((TreeVFlowNode)RootTreeNode).AutoScrollMargin.Height:0);
 
             Controls.Cast<Control>()
-                .ToList().ForEach(v => v.Width = ClientSize.Width-Margin.Horizontal);
-        }
-        
-        protected void RefreshNodeWith()
-        {
-            SuspendLayout();
-            SetNodeWidth();
-            TreeNodes.ToList().ForEach(v=>((TreeVFlowNode)v).RefreshNodeWith());
-            
-            ResumeLayout();
+                .ToList().ForEach(v =>
+                {
+                    v.SuspendLayout();
+                    v.Width = Width;
+                    v.ResumeLayout();
+                });
         }
         
         public override string ToString()

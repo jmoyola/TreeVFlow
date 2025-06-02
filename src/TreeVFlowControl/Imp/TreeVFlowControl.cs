@@ -23,7 +23,7 @@ namespace TreeVFlowControl.Imp
         
         protected override void OnResize(EventArgs eventargs)
         {
-            RefreshNodeWith();
+            RefreshNodeLayout(true);
             base.OnResize(eventargs);
         }
         
