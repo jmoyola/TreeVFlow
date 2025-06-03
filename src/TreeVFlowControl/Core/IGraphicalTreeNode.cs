@@ -25,8 +25,11 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         event TreeNodeEventHandler ContentNodeClick;
         event TreeNodeEventHandler ContentNodeDoubleClick;
-        event TreeNodeEventHandler TreeNodeCollapsed;
-        event TreeNodeEventHandler TreeNodeExpanded;
+        event TreeNodeEventHandler TreeNodeExpandedChanged;
+        event TreeNodeEventHandler TreeNodeVisibleChanged;
+        event TreeNodeEventHandler ContentNodeVisibleChanged;
+        event TreeNodeEventHandler TreeNodeEnabledChanged;
+        event TreeNodeEventHandler ContentNodeEnabledChanged;
         event TreeNodeEventHandler TreeNodeAdded;
         event TreeNodeEventHandler TreeNodeRemoved;
         event TreeNodeEventHandler ContentNodeAdded;
@@ -44,6 +47,7 @@ namespace TreeVFlowControl.Core
         Control Footer { get; set; }
         IGraphicalTreeNode ParentTreeNode { get;}
         Panel PanelContainer { get; }
+        IList<IGraphicalTreeNode> NodeBranch { get; }
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
         IList<IGraphicalTreeNode> TreeNodes { get; }
@@ -61,9 +65,6 @@ namespace TreeVFlowControl.Core
         IList<Control> TreeContent { get; }
         void ClearAll();
         bool IsExpanded { get; }
-        void ToggleItems();
-        void Collapse();
-        void Expand();
-
+        bool Expand { get; set; }
     }
 }

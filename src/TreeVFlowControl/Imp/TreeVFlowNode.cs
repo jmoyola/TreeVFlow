@@ -143,15 +143,16 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         public event TreeNodeEventHandler ContentNodeClick;
         public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeCollapsed;
-        public event TreeNodeEventHandler TreeNodeExpanded;
+        public event TreeNodeEventHandler TreeNodeExpandedChanged;
+        public event TreeNodeEventHandler TreeNodeVisibleChanged;
+        public event TreeNodeEventHandler ContentNodeVisibleChanged;
+        public event TreeNodeEventHandler TreeNodeEnabledChanged;
+        public event TreeNodeEventHandler ContentNodeEnabledChanged;
         public event TreeNodeEventHandler TreeNodeAdded;
         public event TreeNodeEventHandler TreeNodeRemoved;
         public event TreeNodeEventHandler ContentNodeAdded;
         public event TreeNodeEventHandler ContentNodeRemoved;
         public event TreeNodeEventHandler TreeNodeRefresh;
-        public event TreeNodeEventHandler ResizeHeight;
-        public event TreeNodeEventHandler ResizeWidth;
         
         protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs args)
         {
@@ -169,13 +170,25 @@ namespace TreeVFlowControl.Imp
         {
             TreeNodeFooterDoubleClick?.Invoke(this, args);
         }      
-        protected virtual void OnTreeNodeExpanded(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeExpandedChanged(TreeNodeEventArgs args)
         {
-            TreeNodeExpanded?.Invoke(this, args);
+            TreeNodeExpandedChanged?.Invoke(this, args);
         }
-        protected virtual void OnTreeNodeCollapsed(TreeNodeEventArgs args)
+        protected virtual void OnTreeNodeVisibleChanged(TreeNodeEventArgs args)
         {
-            TreeNodeCollapsed?.Invoke(this, args);
+            TreeNodeVisibleChanged?.Invoke(this, args);
+        }
+        protected virtual void OnContentNodeVisibleChanged(TreeNodeEventArgs args)
+        {
+            ContentNodeVisibleChanged?.Invoke(this, args);
+        }
+        protected virtual void OnTreeNodeEnabledChanged(TreeNodeEventArgs args)
+        {
+            TreeNodeEnabledChanged?.Invoke(this, args);
+        }
+        protected virtual void OnContentNodeEnabledChanged(TreeNodeEventArgs args)
+        {
+            ContentNodeEnabledChanged?.Invoke(this, args);
         }
         protected virtual void OnTreeNodeAdded(TreeNodeEventArgs args)
         {
@@ -204,14 +217,6 @@ namespace TreeVFlowControl.Imp
         protected virtual void OnContentNodeRemoved(TreeNodeEventArgs args)
         {
             ContentNodeRemoved?.Invoke(this, args);
-        }
-        protected virtual void OnResizeWidth(TreeNodeEventArgs args)
-        {
-            ResizeWidth?.Invoke(this, args);
-        }
-        protected virtual void OnResizeHeight(TreeNodeEventArgs args)
-        {
-            ResizeHeight?.Invoke(this, args);
         }
 
 #endregion
@@ -421,36 +426,27 @@ namespace TreeVFlowControl.Imp
         }
         
         public virtual bool IsDisabled=>_isDisabled;
-        public virtual void DisableItem()
+
+        public virtual bool NodeDisable
         {
-            if (_isDisabled) return;
-            
-            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=false);
-            _isDisabled = true;
+            get=>_isDisabled;
+            set => SetNodeDisable(value);
         }
-    
-        public virtual void EnableItem()
+        private void SetNodeDisable(bool disable)
         {
-            if (!_isDisabled) return;
-        
-            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=true);
-            _isDisabled = false;
+            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=(!disable));
+            _isDisabled = disable;
+            OnTreeNodeEnabledChanged(new TreeNodeEventArgs(this));
         }
         
         public bool IsExpanded=>_isExpanded;
-        public void ToggleItems()
+        
+        public virtual bool Expand
         {
-            Expand(!_isExpanded);
+            get => _isExpanded;
+            set => SetExpand(value);
         }
-        
-        public void Collapse() {
-            Expand(false);
-        }
-        
-        public void Expand() {
-            Expand(true);
-        }
-        private void Expand(bool expand) {
+        private void SetExpand(bool expand) {
             try
             {
                 TreeNodeLock.Wait();
@@ -470,10 +466,9 @@ namespace TreeVFlowControl.Imp
                         controls[i].ResumeLayout();
                     }
 
-                if (_isExpanded)
-                    OnTreeNodeExpanded(new TreeNodeEventArgs(this));
-                else
-                    OnTreeNodeCollapsed(new TreeNodeEventArgs(this));
+                
+                OnTreeNodeExpandedChanged(new TreeNodeEventArgs(this));
+                
                 
                 ResumeLayout();
             }
@@ -523,6 +518,20 @@ namespace TreeVFlowControl.Imp
         public override string ToString()
         {
             return Text;
+        }
+
+        public IList<IGraphicalTreeNode> NodeBranch=>GetNodeBranch();
+        private IList<IGraphicalTreeNode> GetNodeBranch()
+        {
+            List<IGraphicalTreeNode> branchList = new List<IGraphicalTreeNode>();
+            IGraphicalTreeNode aux = this;
+            while (aux != null)
+            {
+                branchList.Insert(0, aux);
+                aux = ParentTreeNode;
+            }
+
+            return branchList;
         }
         
         public IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate)

@@ -14,8 +14,11 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         public event TreeNodeEventHandler ContentNodeClick;
         public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeCollapsed;
-        public event TreeNodeEventHandler TreeNodeExpanded;
+        public event TreeNodeEventHandler TreeNodeExpandedChanged;
+        public event TreeNodeEventHandler TreeNodeVisibleChanged;
+        public event TreeNodeEventHandler ContentNodeVisibleChanged;
+        public event TreeNodeEventHandler TreeNodeEnabledChanged;
+        public event TreeNodeEventHandler ContentNodeEnabledChanged;
         public event TreeNodeEventHandler TreeNodeAdded;
         public event TreeNodeEventHandler TreeNodeRemoved;
         public event TreeNodeEventHandler ContentNodeAdded;
@@ -43,7 +46,7 @@ namespace TreeVFlowControl.Imp
             _rootNode.Header = null;
             _rootNode.LevelIndent = 5;
             _rootNode.RowStyles.Add(new RowStyle(SizeType.AutoSize, 20F));
-            _rootNode.Expand();
+            _rootNode.Expand=true;
             _rootNode.TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
         
@@ -61,8 +64,13 @@ namespace TreeVFlowControl.Imp
             node.TreeNodeAdded +=(_, args) => TreeNodeAdded?.Invoke(this, args);
             node.TreeNodeRemoved +=(_, args) => TreeNodeRemoved?.Invoke(this, args);
             node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
-            node.TreeNodeCollapsed += (_, args) => TreeNodeCollapsed?.Invoke(this, args);
-            node.TreeNodeExpanded += (_, args) => TreeNodeExpanded?.Invoke(this, args);
+            
+            node.TreeNodeExpandedChanged += (_, args) => TreeNodeExpandedChanged?.Invoke(this, args);
+            node.TreeNodeEnabledChanged += (_, args) => TreeNodeEnabledChanged?.Invoke(this, args);
+            node.ContentNodeEnabledChanged += (_, args) => ContentNodeEnabledChanged?.Invoke(this, args);
+            node.TreeNodeVisibleChanged += (_, args) => TreeNodeVisibleChanged?.Invoke(this, args);
+            node.ContentNodeVisibleChanged += (_, args) => ContentNodeVisibleChanged?.Invoke(this, args);
+            
             node.TreeNodeHeaderClick += (_, args) => TreeNodeHeaderClick?.Invoke(this, args);
             node.TreeNodeHeaderDoubleClick += (_, args) => TreeNodeHeaderDoubleClick?.Invoke(this, args);
             node.TreeNodeFooterClick += (_, args) => TreeNodeFooterClick?.Invoke(this, args);

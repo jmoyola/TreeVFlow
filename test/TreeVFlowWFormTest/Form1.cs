@@ -41,8 +41,7 @@ namespace TreeVFlowWFormTest
             _treeVFlowControl1.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
-            _treeVFlowControl1.TreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
-            _treeVFlowControl1.TreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.TreeNodeExpandedChanged +=TreeVFlowNode1_TreeNodeRefresh;
         }
 
         private void TreeVFlowNode1_TreeNodeAdded(object sender, TreeNodeEventArgs args)
@@ -78,7 +77,7 @@ namespace TreeVFlowWFormTest
             
             _treeNodesCount ++;
             TreeVFlowNode nn = new TreeVFlowNode {Text= "Header " + _treeNodesCount , Header= new Label(){Text = "Header"  + _treeNodesCount, Height=30, BorderStyle = BorderStyle.FixedSingle}, Footer = new Label(){Text = "Footer"  + _treeNodesCount, Height=30, BorderStyle = BorderStyle.FixedSingle}};
-            nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.ToggleItems(); 
+            nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.Expand= !args.TreeNode.Expand; 
             _currentTreeNode.AddTreeNode(nn);
             
 

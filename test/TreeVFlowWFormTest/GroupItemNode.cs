@@ -36,7 +36,7 @@ public class GroupItemNode:TreeVFlowNode
         
         Header = btn;
         
-        btn.Click +=(_,_)=> ToggleItems();
+        btn.Click +=(_,_)=> Expand=(!Expand);
         TextChanged +=(_,_)=> btn.Text=Text;
         btn.Image = ArrowUpImage;
         btn.ImageAlign = ContentAlignment.MiddleLeft;
@@ -44,13 +44,9 @@ public class GroupItemNode:TreeVFlowNode
         this.Footer = new Label(){Height = 30, Text = "Show More", Visible = false};
     }
 
-    protected override void OnTreeNodeExpanded(TreeNodeEventArgs args)
+    protected override void OnTreeNodeExpandedChanged(TreeNodeEventArgs args)
     {
-        ((Button)Header).Image = ArrowUpImage;
+        ((Button)Header).Image =args.TreeNode.Expand? ArrowUpImage:ArrowDownImage;
     }
 
-    protected override void OnTreeNodeCollapsed(TreeNodeEventArgs args)
-    {
-        ((Button)Header).Image = ArrowDownImage;
-    }
 }
