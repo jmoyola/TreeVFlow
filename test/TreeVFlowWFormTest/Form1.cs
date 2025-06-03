@@ -36,7 +36,7 @@ namespace TreeVFlowWFormTest
             _treeVFlowControl1.ContentNodeClick += (_, args) =>
             {
                 _currentContentNode = args.Content;
-                lblContentNode.Text=$"[{args.Content.Name}] {args.Content.Text}";
+                lblContentNode.Text=$"[{args.Content.Name}]";
             };
             _treeVFlowControl1.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
@@ -84,9 +84,7 @@ namespace TreeVFlowWFormTest
 
             
         }
-
-
-
+        
         private void removeTreeNodeButton_Click(object sender, EventArgs e)
         {
             _currentTreeNode?.ParentTreeNode?.RemoveTreeNode(_currentTreeNode);
