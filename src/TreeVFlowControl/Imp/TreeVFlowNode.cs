@@ -46,6 +46,7 @@ namespace TreeVFlowControl.Imp
                 {
                     TreeNodeLock.Wait();
 
+                    SuspendLayout();
                     if (_header != null)
                     {
                         Controls.RemoveAt(0);
@@ -63,6 +64,7 @@ namespace TreeVFlowControl.Imp
                 }
                 finally
                 {
+                    ResumeLayout();
                     TreeNodeLock.Release();
                 }
             }
@@ -77,6 +79,7 @@ namespace TreeVFlowControl.Imp
                 {
                     TreeNodeLock.Wait();
                     
+                    SuspendLayout();
                     if (_footer != null)
                     {
                         Controls.RemoveAt(Controls.Count - 1);
@@ -94,6 +97,7 @@ namespace TreeVFlowControl.Imp
                 }
                 finally
                 {
+                    ResumeLayout();
                     TreeNodeLock.Release();
                 }
             }
@@ -262,12 +266,12 @@ namespace TreeVFlowControl.Imp
                 SubControlAdded(content);
                 
                 content.ResumeLayout();
-                ResumeLayout();
                 
                 OnContentNodeAdded(new TreeNodeEventArgs(this, content));
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }
@@ -285,12 +289,13 @@ namespace TreeVFlowControl.Imp
                 SubControlRemoved(content);
 
                 content.ResumeLayout();
-                ResumeLayout();
+                
                 
                 OnContentNodeRemoved(new TreeNodeEventArgs(this, content));
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }
@@ -311,10 +316,11 @@ namespace TreeVFlowControl.Imp
 
                     v.ResumeLayout();
                 });
-                ResumeLayout();
+                
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }
@@ -338,15 +344,17 @@ namespace TreeVFlowControl.Imp
                 Controls.SetChildIndex(newTreeVFlowNode, Controls.Count - (_footer == null ? 1 : 2));
                 
                 newTreeVFlowNode.RefreshNodeLayout();
+                RefreshNodeLayout();
                 
                 newTreeVFlowNode.ResumeLayout();
-                ResumeLayout();
+                
                 
                 OnTreeNodeAdded(new TreeNodeEventArgs(newTreeVFlowNode));
                 return newTreeVFlowNode;
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }

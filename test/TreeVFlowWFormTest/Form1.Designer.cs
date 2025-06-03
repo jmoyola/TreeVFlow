@@ -36,6 +36,7 @@ namespace TreeVFlowWFormTest
             this.addContentButton = new System.Windows.Forms.Button();
             this.removeTreeNodeButton = new System.Windows.Forms.Button();
             this.addTreeNodeButton = new System.Windows.Forms.Button();
+            this.rootNodeActiveTreeNodeButton1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -54,6 +55,7 @@ namespace TreeVFlowWFormTest
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.rootNodeActiveTreeNodeButton1);
             this.splitContainer1.Panel2.Controls.Add(this.button11);
             this.splitContainer1.Panel2.Controls.Add(this.activeTreeNodeToggleVisibleButton);
             this.splitContainer1.Panel2.Controls.Add(this.activeContentToggleVisibleButton);
@@ -226,6 +228,16 @@ namespace TreeVFlowWFormTest
             this.addTreeNodeButton.UseVisualStyleBackColor = true;
             this.addTreeNodeButton.Click += new System.EventHandler(this.addTreeNodeButton_Click);
             // 
+            // rootNodeActiveTreeNodeButton1
+            // 
+            this.rootNodeActiveTreeNodeButton1.Location = new System.Drawing.Point(254, 255);
+            this.rootNodeActiveTreeNodeButton1.Name = "rootNodeActiveTreeNodeButton1";
+            this.rootNodeActiveTreeNodeButton1.Size = new System.Drawing.Size(194, 44);
+            this.rootNodeActiveTreeNodeButton1.TabIndex = 15;
+            this.rootNodeActiveTreeNodeButton1.Text = "Set RootNode ActiveTreeNode";
+            this.rootNodeActiveTreeNodeButton1.UseVisualStyleBackColor = true;
+            this.rootNodeActiveTreeNodeButton1.Click += new System.EventHandler(this.rootNodeActiveTreeNodeButton1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -241,6 +253,8 @@ namespace TreeVFlowWFormTest
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button rootNodeActiveTreeNodeButton1;
 
         private System.Windows.Forms.Button button11;
 

@@ -11,6 +11,7 @@ namespace TreeVFlowWFormTest
     public partial class Form1 : Form
     {
         private int _treeNodesCount;
+        private int _contentsCount;
         private TreeVFlowNode _currentTreeNode;
         private Control _currentContentNode;
         
@@ -35,7 +36,7 @@ namespace TreeVFlowWFormTest
             _treeVFlowControl1.ContentNodeClick += (_, args) =>
             {
                 _currentContentNode = args.Content;
-                lblContentNode.Text=args.Content.Text;
+                lblContentNode.Text=$"[{args.Content.Name}] {args.Content.Text}";
             };
             _treeVFlowControl1.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
@@ -93,7 +94,8 @@ namespace TreeVFlowWFormTest
 
         private void addContentButton_Click(object sender, EventArgs e)
         {
-            _currentTreeNode?.AddContent(new TextBox(){Height = 30});
+            _contentsCount++;
+            _currentTreeNode?.AddContent(new TextBox(){Height = 30, Name = $"Content {_contentsCount}", Text = $"Content {_contentsCount}"});
         }
 
         private void removeContentButton_Click(object sender, EventArgs e)
@@ -146,6 +148,12 @@ namespace TreeVFlowWFormTest
             _treeNodesCount ++;
             GroupItemNode nn = new GroupItemNode {Text= "Header " + _treeNodesCount , Height = 30};
             _currentTreeNode.AddTreeNode(nn);
+        }
+
+        private void rootNodeActiveTreeNodeButton1_Click(object sender, EventArgs e)
+        {
+            _currentTreeNode = _treeVFlowControl1.RootNode;
+            lblTreeNode.Text = _currentTreeNode.Text;
         }
     }
 }

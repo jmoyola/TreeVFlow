@@ -42,7 +42,7 @@ namespace TreeVFlowControl.Imp
             _rootNode.Footer = null;
             _rootNode.Header = null;
             _rootNode.LevelIndent = 5;
-            _rootNode.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            _rootNode.RowStyles.Add(new RowStyle(SizeType.AutoSize, 20F));
             _rootNode.Expand();
             _rootNode.TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
