@@ -496,7 +496,7 @@ namespace TreeVFlowControl.Imp
         {
             if (ParentTreeNode != null)
                 Width = ((TreeVFlowNode)ParentTreeNode).ClientSize.Width - 10 - Margin.Left
-                   - (ParentTreeNode==RootTreeNode?((TreeVFlowNode)RootTreeNode).AutoScrollMargin.Height:0);
+                   - (ParentTreeNode==RootTreeNode && ((TreeVFlowNode)RootTreeNode).VerticalScroll.Visible?SystemInformation.VerticalScrollBarWidth:0);
 
             Controls.Cast<Control>()
                 .ToList().ForEach(v =>

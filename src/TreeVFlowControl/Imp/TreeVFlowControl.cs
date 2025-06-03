@@ -15,6 +15,8 @@ namespace TreeVFlowControl.Imp
 
         private void Init()
         {
+            Header = null;
+            Footer = null;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             AutoScroll = true;
