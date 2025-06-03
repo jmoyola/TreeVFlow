@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -102,6 +101,15 @@ namespace TreeVFlowControl.Imp
 
         public IGraphicalTreeNode ParentTreeNode => Parent as TreeVFlowNode;
         public IGraphicalTreeNode RootTreeNode=>ParentTreeNode==null?this:ParentTreeNode.RootTreeNode;
+        public Panel PanelContainer
+        {
+            get
+            {
+                Panel pnl = Parent as Panel;
+                return pnl ?? ParentTreeNode.PanelContainer;
+            }
+        }
+
         public int TreeLevel => ParentTreeNode == null ? 0 : ParentTreeNode.TreeLevel + 1;
         
         private void SubControl_Click(object sender, EventArgs args)
@@ -424,10 +432,7 @@ namespace TreeVFlowControl.Imp
         public bool IsExpanded=>_isExpanded;
         public void ToggleItems()
         {
-            if(_isExpanded)
-                Expand(false);
-            else
-                Expand(true);
+            Expand(!_isExpanded);
         }
         
         public void Collapse() {
@@ -475,7 +480,7 @@ namespace TreeVFlowControl.Imp
             OnTreeNodeRefresh(new TreeNodeEventArgs(this));
         }
 
-        protected void RefreshNodeLayout(bool deep=false)
+        public void RefreshNodeLayout(bool deep=false)
         {
             SuspendLayout();
             RefreshNodeMargin();
@@ -494,9 +499,9 @@ namespace TreeVFlowControl.Imp
         
         protected void RefreshNodeWidth()
         {
-            if (ParentTreeNode != null)
-                Width = ((TreeVFlowNode)ParentTreeNode).ClientSize.Width - 10 - Margin.Left
-                   - (ParentTreeNode==RootTreeNode && ((TreeVFlowNode)RootTreeNode).VerticalScroll.Visible?SystemInformation.VerticalScrollBarWidth:0);
+            if (Parent != null)
+                Width = Parent.ClientSize.Width - Margin.Horizontal
+                   - (PanelContainer==null?0: PanelContainer.VerticalScroll.Visible?SystemInformation.VerticalScrollBarWidth:0);
 
             Controls.Cast<Control>()
                 .ToList().ForEach(v =>

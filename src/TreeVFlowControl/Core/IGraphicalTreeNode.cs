@@ -16,7 +16,8 @@ namespace TreeVFlowControl.Core
         public IGraphicalTreeNode TreeNode { get; internal set; }
         public Control Content { get; internal set; }
     }
-    public interface IGraphicalTreeNode
+
+    public interface IGraphicalTreeNodeEvents
     {
         event TreeNodeEventHandler TreeNodeHeaderClick;
         event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
@@ -31,15 +32,18 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler ContentNodeAdded;
         event TreeNodeEventHandler ContentNodeRemoved;
         event TreeNodeEventHandler TreeNodeRefresh;
-        event TreeNodeEventHandler ResizeHeight;
-        event TreeNodeEventHandler ResizeWidth;
-        
+
+    }
+
+    public interface IGraphicalTreeNode:IGraphicalTreeNodeEvents
+    {
         String Text { get; set; }
         Color BackColor { get; set; }
         bool Visible { get; set; }
         Control Header { get; set; }
         Control Footer { get; set; }
         IGraphicalTreeNode ParentTreeNode { get;}
+        Panel PanelContainer { get; }
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
         IList<IGraphicalTreeNode> TreeNodes { get; }

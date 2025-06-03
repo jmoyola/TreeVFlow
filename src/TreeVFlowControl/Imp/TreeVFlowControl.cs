@@ -1,49 +1,76 @@
 ﻿using System;
-using System.Linq;
 using TreeVFlowControl.Core;
 using System.Windows.Forms;
 
 namespace TreeVFlowControl.Imp
 {
-    public class TreeVFlowControl:TreeVFlowNode
+    public class TreeVFlowControl:Panel, IGraphicalTreeNodeEvents
     {
+        private readonly TreeVFlowNode _rootNode=new ();
+        
+        public event TreeNodeEventHandler TreeNodeHeaderClick;
+        public event TreeNodeEventHandler TreeNodeHeaderDoubleClick;
+        public event TreeNodeEventHandler TreeNodeFooterClick;
+        public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
+        public event TreeNodeEventHandler ContentNodeClick;
+        public event TreeNodeEventHandler ContentNodeDoubleClick;
+        public event TreeNodeEventHandler TreeNodeCollapsed;
+        public event TreeNodeEventHandler TreeNodeExpanded;
+        public event TreeNodeEventHandler TreeNodeAdded;
+        public event TreeNodeEventHandler TreeNodeRemoved;
+        public event TreeNodeEventHandler ContentNodeAdded;
+        public event TreeNodeEventHandler ContentNodeRemoved;
+        public event TreeNodeEventHandler TreeNodeRefresh;
+
+        
         public TreeVFlowControl()
         {
             Init();
-            TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
+            
         }
 
         private void Init()
         {
-            Header = null;
-            Footer = null;
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             AutoScroll = true;
-            Expand();
+            
+            Controls.Add(_rootNode);
+            _rootNode.Top = 0;
+            _rootNode.Left = 0;
+            
+            _rootNode.ColumnCount = 1;
+            _rootNode.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 341F));
+            _rootNode.Footer = null;
+            _rootNode.Header = null;
+            _rootNode.LevelIndent = 5;
+            _rootNode.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            _rootNode.Expand();
+            _rootNode.TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
+        
+        public TreeVFlowNode RootNode=> _rootNode;
         
         protected override void OnResize(EventArgs eventargs)
         {
-            RefreshNodeLayout(true);
+            _rootNode.RefreshNodeLayout(true);
             base.OnResize(eventargs);
         }
         
         private void JoinAllEvents(IGraphicalTreeNode node)
         {
-            node.TreeNodeAdded +=(_, args) => OnTreeNodeAdded(args);
-            node.TreeNodeRemoved +=(_, args) => OnTreeNodeRemoved(args);
-            node.TreeNodeRefresh +=(_, args) => OnTreeNodeRefresh(args);
-            node.TreeNodeCollapsed += (_, args) => OnTreeNodeCollapsed(args);
-            node.TreeNodeExpanded += (_, args) => OnTreeNodeExpanded(args);
-            node.TreeNodeHeaderClick += (_, args) => OnTreeNodeHeaderClick(args);
-            node.TreeNodeHeaderDoubleClick += (_, args) => OnTreeNodeHeaderDoubleClick(args);
-            node.TreeNodeFooterClick += (_, args) => OnTreeNodeFooterClick(args);
-            node.TreeNodeFooterDoubleClick += (_, args) => OnTreeNodeFooterDoubleClick(args);
-            node.ContentNodeAdded +=(_, args) => OnContentNodeAdded(args);
-            node.ContentNodeRemoved +=(_, args) => OnContentNodeRemoved(args);
-            node.ContentNodeClick += (_, args) => OnContentNodeClick(args);
-            node.ContentNodeDoubleClick += (_, args) => OnContentNodeDoubleClick(args);
+            node.TreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
+            node.TreeNodeAdded +=(_, args) => TreeNodeAdded?.Invoke(this, args);
+            node.TreeNodeRemoved +=(_, args) => TreeNodeRemoved?.Invoke(this, args);
+            node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
+            node.TreeNodeCollapsed += (_, args) => TreeNodeCollapsed?.Invoke(this, args);
+            node.TreeNodeExpanded += (_, args) => TreeNodeExpanded?.Invoke(this, args);
+            node.TreeNodeHeaderClick += (_, args) => TreeNodeHeaderClick?.Invoke(this, args);
+            node.TreeNodeHeaderDoubleClick += (_, args) => TreeNodeHeaderDoubleClick?.Invoke(this, args);
+            node.TreeNodeFooterClick += (_, args) => TreeNodeFooterClick?.Invoke(this, args);
+            node.TreeNodeFooterDoubleClick += (_, args) => TreeNodeFooterDoubleClick?.Invoke(this, args);
+            node.ContentNodeAdded +=(_, args) => ContentNodeAdded?.Invoke(this, args);
+            node.ContentNodeRemoved +=(_, args) => ContentNodeRemoved?.Invoke(this, args);
+            node.ContentNodeClick += (_, args) => ContentNodeClick?.Invoke(this, args);
+            node.ContentNodeDoubleClick += (_, args) => ContentNodeDoubleClick?.Invoke(this, args);
         }
 
         public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)
@@ -53,7 +80,7 @@ namespace TreeVFlowControl.Imp
         }
         public void ScrollShowTreeNode(Func<IGraphicalTreeNode, bool> predicate)
         {
-            var treeNode = TreeDeepFirstOrDefault(predicate);
+            var treeNode = _rootNode.TreeDeepFirstOrDefault(predicate);
             ScrollShowTreeNode(treeNode);
         }
         
@@ -63,9 +90,11 @@ namespace TreeVFlowControl.Imp
         }
         public void ScrollShowContentNode(Func<Control, bool> predicate)
         {
-            var contentNode = ContentDeepFirstOrDefault(predicate);
+            var contentNode = _rootNode.ContentDeepFirstOrDefault(predicate);
             if(contentNode != null)
                 ScrollControlIntoView(contentNode);
         }
+
+
     }
 }

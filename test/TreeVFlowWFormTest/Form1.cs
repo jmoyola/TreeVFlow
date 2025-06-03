@@ -10,57 +10,54 @@ namespace TreeVFlowWFormTest
 {
     public partial class Form1 : Form
     {
-        private int _count;
+        private int _treeNodesCount;
         private TreeVFlowNode _currentTreeNode;
         private Control _currentContentNode;
         
         public Form1()
         {
             InitializeComponent();
-            _treeVFlowControlNode1.AutoSize = true;
-            _treeVFlowControlNode1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            _treeVFlowControlNode1.LevelIndent = 5;
-            _treeVFlowControlNode1.Left = 0;
-            _treeVFlowControlNode1.Top = 0;
-            splitContainer1.Panel1.Resize += (sender, args) => _treeVFlowControlNode1.Width = splitContainer1.Panel1.Width; 
+
+            _treeVFlowControl1.RootNode.LevelIndent = 5;
+            _treeVFlowControl1.Dock = DockStyle.Fill;
             
-            _currentTreeNode = _treeVFlowControlNode1;
-            JoinAllEvents(_treeVFlowControlNode1);
+            _currentTreeNode = _treeVFlowControl1.RootNode;
+            JoinAllEvents();
         }
 
-        private void JoinAllEvents(TreeVFlowNode node)
+        private void JoinAllEvents()
         {
-            node.TreeNodeHeaderClick += (_, a) =>
+            _treeVFlowControl1.TreeNodeHeaderClick += (_, a) =>
             {
                 _currentTreeNode = a.TreeNode as TreeVFlowNode;
                 lblTreeNode.Text=a.TreeNode.Text;
             };
-            node.ContentNodeClick += (_, args) =>
+            _treeVFlowControl1.ContentNodeClick += (_, args) =>
             {
                 _currentContentNode = args.Content;
                 lblContentNode.Text=args.Content.Text;
             };
-            node.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
-            node.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
+            _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
-            node.TreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
-            node.TreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.TreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.TreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
         }
 
         private void TreeVFlowNode1_TreeNodeAdded(object sender, TreeNodeEventArgs args)
         {
             if(args.TreeNode.TreeLevel==0)
-                args.TreeNode.BackColor = Color.Aqua;
-            else if (args.TreeNode.TreeLevel == 1)
                 args.TreeNode.BackColor = Color.Yellow;
-            else if (args.TreeNode.TreeLevel == 2)
+            else if (args.TreeNode.TreeLevel == 1)
                 args.TreeNode.BackColor = Color.Gray;
-            else if (args.TreeNode.TreeLevel == 3)
+            else if (args.TreeNode.TreeLevel == 2)
                 args.TreeNode.BackColor = Color.White;
-            else if (args.TreeNode.TreeLevel == 4)
+            else if (args.TreeNode.TreeLevel == 3)
                 args.TreeNode.BackColor = Color.RosyBrown;
-            else if (args.TreeNode.TreeLevel >= 5)
+            else if (args.TreeNode.TreeLevel == 4)
                 args.TreeNode.BackColor = Color.Beige;
+            else if (args.TreeNode.TreeLevel >= 5)
+                args.TreeNode.BackColor = Color.Aquamarine;
             TreeVFlowNode1_TreeNodeRefresh(sender, args);
             if (args.TreeNode.ParentTreeNode!=null)
                 TreeVFlowNode1_TreeNodeRefresh(sender, new TreeNodeEventArgs(args.TreeNode.ParentTreeNode, null));
@@ -73,13 +70,13 @@ namespace TreeVFlowWFormTest
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void addTreeNodeButton_Click(object sender, EventArgs e)
         {
             if (_currentTreeNode == null)
                 return;
             
-            _count ++;
-            TreeVFlowNode nn = new TreeVFlowNode {Text= "Header " + _count , Height = 30, Header= new Label(){Text = "Header"  + _count, Height=30, BorderStyle = BorderStyle.FixedSingle}, Footer = new Label(){Text = "Footer"  + _count, Height=30, BorderStyle = BorderStyle.FixedSingle}};
+            _treeNodesCount ++;
+            TreeVFlowNode nn = new TreeVFlowNode {Text= "Header " + _treeNodesCount , Header= new Label(){Text = "Header"  + _treeNodesCount, Height=30, BorderStyle = BorderStyle.FixedSingle}, Footer = new Label(){Text = "Footer"  + _treeNodesCount, Height=30, BorderStyle = BorderStyle.FixedSingle}};
             nn.TreeNodeHeaderDoubleClick+=(o, args) => args.TreeNode.ToggleItems(); 
             _currentTreeNode.AddTreeNode(nn);
             
@@ -89,53 +86,53 @@ namespace TreeVFlowWFormTest
 
 
 
-        private void button2_Click(object sender, EventArgs e)
+        private void removeTreeNodeButton_Click(object sender, EventArgs e)
         {
             _currentTreeNode?.ParentTreeNode?.RemoveTreeNode(_currentTreeNode);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void addContentButton_Click(object sender, EventArgs e)
         {
             _currentTreeNode?.AddContent(new TextBox(){Height = 30});
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void removeContentButton_Click(object sender, EventArgs e)
         {
             (_currentContentNode?.Parent as TreeVFlowNode)?.RemoveContent(_currentContentNode);
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void showActiveTreeNodeButton_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null)
-                _treeVFlowControlNode1.ScrollShowTreeNode(_currentTreeNode);
+                _treeVFlowControl1.ScrollShowTreeNode(_currentTreeNode);
             
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void showActiveContentButton_Click(object sender, EventArgs e)
         {
             if(_currentContentNode!=null)
-                _treeVFlowControlNode1.ScrollShowContentNode(_currentContentNode);
+                _treeVFlowControl1.ScrollShowContentNode(_currentContentNode);
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void activeTreeNodeHeaderVisibleToggleButton_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null && _currentTreeNode.Header!=null)
                 _currentTreeNode.Header.Visible= (!_currentTreeNode.Header.Visible);
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private void activeTreeNodeFooterVisibleToggleButton_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null && _currentTreeNode.Footer!=null)
                 _currentTreeNode.Footer.Visible= (!_currentTreeNode.Footer.Visible);
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void activeContentVisibleToggleButton_Click(object sender, EventArgs e)
         {
             if(_currentContentNode!=null)
                 _currentContentNode.Visible= (!_currentContentNode.Visible);
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private void activeTreeNodeToggleVisibleButton_Click(object sender, EventArgs e)
         {
             if(_currentTreeNode!=null)
                 _currentTreeNode.Visible= (!_currentTreeNode.Visible);
@@ -146,8 +143,8 @@ namespace TreeVFlowWFormTest
             if (_currentTreeNode == null)
                 return;
             
-            _count ++;
-            GroupItemNode nn = new GroupItemNode {Text= "Header " + _count , Height = 30};
+            _treeNodesCount ++;
+            GroupItemNode nn = new GroupItemNode {Text= "Header " + _treeNodesCount , Height = 30};
             _currentTreeNode.AddTreeNode(nn);
         }
     }

@@ -6,12 +6,12 @@ namespace TreeVFlowWFormTest
     {
 
         #region Windows Form Designer generated code
-        private TreeVFlowControl.Imp.TreeVFlowControl _treeVFlowControlNode1;
+        private TreeVFlowControl.Imp.TreeVFlowControl _treeVFlowControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button addTreeNodeButton;
+        private System.Windows.Forms.Button removeTreeNodeButton;
+        private System.Windows.Forms.Button addContentButton;
+        private System.Windows.Forms.Button removeContentButton;
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -20,22 +20,22 @@ namespace TreeVFlowWFormTest
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this._treeVFlowControlNode1 = new TreeVFlowControl.Imp.TreeVFlowControl();
+            this._treeVFlowControl1 = new TreeVFlowControl.Imp.TreeVFlowControl();
             this.button11 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.activeTreeNodeToggleVisibleButton = new System.Windows.Forms.Button();
+            this.activeContentToggleVisibleButton = new System.Windows.Forms.Button();
+            this.activeTreeNodeFooterToggleVisibleButton = new System.Windows.Forms.Button();
+            this.activeTreeNodeHeaderToggleVisibleButton = new System.Windows.Forms.Button();
+            this.showActiveContentButton = new System.Windows.Forms.Button();
+            this.showActiveTreeNodeButton = new System.Windows.Forms.Button();
             this.lblContentNode = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lblTreeNode = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.removeContentButton = new System.Windows.Forms.Button();
+            this.addContentButton = new System.Windows.Forms.Button();
+            this.removeTreeNodeButton = new System.Windows.Forms.Button();
+            this.addTreeNodeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -50,47 +50,39 @@ namespace TreeVFlowWFormTest
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.AutoScroll = true;
-            this.splitContainer1.Panel1.Controls.Add(this._treeVFlowControlNode1);
+            this.splitContainer1.Panel1.Controls.Add(this._treeVFlowControl1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.button11);
-            this.splitContainer1.Panel2.Controls.Add(this.button10);
-            this.splitContainer1.Panel2.Controls.Add(this.button9);
-            this.splitContainer1.Panel2.Controls.Add(this.button8);
-            this.splitContainer1.Panel2.Controls.Add(this.button7);
-            this.splitContainer1.Panel2.Controls.Add(this.button6);
-            this.splitContainer1.Panel2.Controls.Add(this.button5);
+            this.splitContainer1.Panel2.Controls.Add(this.activeTreeNodeToggleVisibleButton);
+            this.splitContainer1.Panel2.Controls.Add(this.activeContentToggleVisibleButton);
+            this.splitContainer1.Panel2.Controls.Add(this.activeTreeNodeFooterToggleVisibleButton);
+            this.splitContainer1.Panel2.Controls.Add(this.activeTreeNodeHeaderToggleVisibleButton);
+            this.splitContainer1.Panel2.Controls.Add(this.showActiveContentButton);
+            this.splitContainer1.Panel2.Controls.Add(this.showActiveTreeNodeButton);
             this.splitContainer1.Panel2.Controls.Add(this.lblContentNode);
             this.splitContainer1.Panel2.Controls.Add(this.label4);
             this.splitContainer1.Panel2.Controls.Add(this.lblTreeNode);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
-            this.splitContainer1.Panel2.Controls.Add(this.button4);
-            this.splitContainer1.Panel2.Controls.Add(this.button3);
-            this.splitContainer1.Panel2.Controls.Add(this.button2);
-            this.splitContainer1.Panel2.Controls.Add(this.button1);
+            this.splitContainer1.Panel2.Controls.Add(this.removeContentButton);
+            this.splitContainer1.Panel2.Controls.Add(this.addContentButton);
+            this.splitContainer1.Panel2.Controls.Add(this.removeTreeNodeButton);
+            this.splitContainer1.Panel2.Controls.Add(this.addTreeNodeButton);
             this.splitContainer1.Size = new System.Drawing.Size(1056, 736);
             this.splitContainer1.SplitterDistance = 341;
             this.splitContainer1.TabIndex = 1;
             // 
-            // _treeVFlowNode1
+            // _treeVFlowControl1
             // 
-            this._treeVFlowControlNode1.AutoScroll = false;
-            this._treeVFlowControlNode1.AutoSize = true;
-            this._treeVFlowControlNode1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this._treeVFlowControlNode1.BackColor = System.Drawing.Color.Azure;
-            this._treeVFlowControlNode1.ColumnCount = 1;
-            this._treeVFlowControlNode1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 341F));
-            this._treeVFlowControlNode1.Footer = null;
-            this._treeVFlowControlNode1.Header = null;
-            this._treeVFlowControlNode1.LevelIndent = 5;
-            this._treeVFlowControlNode1.Location = new System.Drawing.Point(0, 0);
-            this._treeVFlowControlNode1.Name = "_treeVFlowControlNode1";
-            this._treeVFlowControlNode1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this._treeVFlowControlNode1.Size = new System.Drawing.Size(341, 0);
-            this._treeVFlowControlNode1.TabIndex = 0;
-            this._treeVFlowControlNode1.Text = "Root";
+            this._treeVFlowControl1.AutoScroll = true;
+            this._treeVFlowControl1.AutoSize = true;
+            this._treeVFlowControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._treeVFlowControl1.BackColor = System.Drawing.Color.Azure;
+            this._treeVFlowControl1.Location = new System.Drawing.Point(0, 0);
+            this._treeVFlowControl1.Name = "_treeVFlowControl1";
+            this._treeVFlowControl1.Size = new System.Drawing.Size(344, 3);
+            this._treeVFlowControl1.TabIndex = 0;
             // 
             // button11
             // 
@@ -102,65 +94,65 @@ namespace TreeVFlowWFormTest
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
-            // button10
+            // activeTreeNodeToggleVisibleButton
             // 
-            this.button10.Location = new System.Drawing.Point(254, 324);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(194, 44);
-            this.button10.TabIndex = 13;
-            this.button10.Text = "ActiveTreeNode Toggle Visible";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.activeTreeNodeToggleVisibleButton.Location = new System.Drawing.Point(61, 317);
+            this.activeTreeNodeToggleVisibleButton.Name = "activeTreeNodeToggleVisibleButton";
+            this.activeTreeNodeToggleVisibleButton.Size = new System.Drawing.Size(194, 44);
+            this.activeTreeNodeToggleVisibleButton.TabIndex = 13;
+            this.activeTreeNodeToggleVisibleButton.Text = "ActiveTreeNode Toggle Visible";
+            this.activeTreeNodeToggleVisibleButton.UseVisualStyleBackColor = true;
+            this.activeTreeNodeToggleVisibleButton.Click += new System.EventHandler(this.activeTreeNodeToggleVisibleButton_Click);
             // 
-            // button9
+            // activeContentToggleVisibleButton
             // 
-            this.button9.Location = new System.Drawing.Point(254, 474);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(194, 44);
-            this.button9.TabIndex = 12;
-            this.button9.Text = "ActiveContentNode Footer Toggle Visible";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.activeContentToggleVisibleButton.Location = new System.Drawing.Point(254, 474);
+            this.activeContentToggleVisibleButton.Name = "activeContentToggleVisibleButton";
+            this.activeContentToggleVisibleButton.Size = new System.Drawing.Size(194, 44);
+            this.activeContentToggleVisibleButton.TabIndex = 12;
+            this.activeContentToggleVisibleButton.Text = "ActiveContent Toggle Visible";
+            this.activeContentToggleVisibleButton.UseVisualStyleBackColor = true;
+            this.activeContentToggleVisibleButton.Click += new System.EventHandler(this.activeContentVisibleToggleButton_Click);
             // 
-            // button8
+            // activeTreeNodeFooterToggleVisibleButton
             // 
-            this.button8.Location = new System.Drawing.Point(254, 424);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(194, 44);
-            this.button8.TabIndex = 11;
-            this.button8.Text = "ActiveTreeNode Footer Toggle Visible";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.activeTreeNodeFooterToggleVisibleButton.Location = new System.Drawing.Point(61, 417);
+            this.activeTreeNodeFooterToggleVisibleButton.Name = "activeTreeNodeFooterToggleVisibleButton";
+            this.activeTreeNodeFooterToggleVisibleButton.Size = new System.Drawing.Size(194, 44);
+            this.activeTreeNodeFooterToggleVisibleButton.TabIndex = 11;
+            this.activeTreeNodeFooterToggleVisibleButton.Text = "ActiveTreeNode Footer Toggle Visible";
+            this.activeTreeNodeFooterToggleVisibleButton.UseVisualStyleBackColor = true;
+            this.activeTreeNodeFooterToggleVisibleButton.Click += new System.EventHandler(this.activeTreeNodeFooterVisibleToggleButton_Click);
             // 
-            // button7
+            // activeTreeNodeHeaderToggleVisibleButton
             // 
-            this.button7.Location = new System.Drawing.Point(254, 374);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(194, 44);
-            this.button7.TabIndex = 10;
-            this.button7.Text = "ActiveTreeNode Header Toggle Visible";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.activeTreeNodeHeaderToggleVisibleButton.Location = new System.Drawing.Point(61, 367);
+            this.activeTreeNodeHeaderToggleVisibleButton.Name = "activeTreeNodeHeaderToggleVisibleButton";
+            this.activeTreeNodeHeaderToggleVisibleButton.Size = new System.Drawing.Size(194, 44);
+            this.activeTreeNodeHeaderToggleVisibleButton.TabIndex = 10;
+            this.activeTreeNodeHeaderToggleVisibleButton.Text = "ActiveTreeNode Header Toggle Visible";
+            this.activeTreeNodeHeaderToggleVisibleButton.UseVisualStyleBackColor = true;
+            this.activeTreeNodeHeaderToggleVisibleButton.Click += new System.EventHandler(this.activeTreeNodeHeaderVisibleToggleButton_Click);
             // 
-            // button6
+            // showActiveContentButton
             // 
-            this.button6.Location = new System.Drawing.Point(254, 123);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(194, 44);
-            this.button6.TabIndex = 9;
-            this.button6.Text = "Show Active Content Node";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.showActiveContentButton.Location = new System.Drawing.Point(254, 123);
+            this.showActiveContentButton.Name = "showActiveContentButton";
+            this.showActiveContentButton.Size = new System.Drawing.Size(194, 44);
+            this.showActiveContentButton.TabIndex = 9;
+            this.showActiveContentButton.Text = "Show Active Content\r\n";
+            this.showActiveContentButton.UseVisualStyleBackColor = true;
+            this.showActiveContentButton.Click += new System.EventHandler(this.showActiveContentButton_Click);
             // 
-            // button5
+            // showActiveTreeNodeButton
             // 
-            this.button5.Location = new System.Drawing.Point(254, 23);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(194, 44);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "Show ActiveTreeNode";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.showActiveTreeNodeButton.Location = new System.Drawing.Point(254, 23);
+            this.showActiveTreeNodeButton.Name = "showActiveTreeNodeButton";
+            this.showActiveTreeNodeButton.Size = new System.Drawing.Size(194, 44);
+            this.showActiveTreeNodeButton.TabIndex = 8;
+            this.showActiveTreeNodeButton.Text = "Show ActiveTreeNode";
+            this.showActiveTreeNodeButton.UseVisualStyleBackColor = true;
+            this.showActiveTreeNodeButton.Click += new System.EventHandler(this.showActiveTreeNodeButton_Click);
             // 
             // lblContentNode
             // 
@@ -194,45 +186,45 @@ namespace TreeVFlowWFormTest
             this.label1.TabIndex = 4;
             this.label1.Text = "Active TreeNode:";
             // 
-            // button4
+            // removeContentButton
             // 
-            this.button4.Location = new System.Drawing.Point(61, 173);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(177, 44);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "RemoveContent";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.removeContentButton.Location = new System.Drawing.Point(61, 173);
+            this.removeContentButton.Name = "removeContentButton";
+            this.removeContentButton.Size = new System.Drawing.Size(177, 44);
+            this.removeContentButton.TabIndex = 3;
+            this.removeContentButton.Text = "RemoveContent";
+            this.removeContentButton.UseVisualStyleBackColor = true;
+            this.removeContentButton.Click += new System.EventHandler(this.removeContentButton_Click);
             // 
-            // button3
+            // addContentButton
             // 
-            this.button3.Location = new System.Drawing.Point(61, 123);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(177, 44);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "AddContent";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.addContentButton.Location = new System.Drawing.Point(61, 123);
+            this.addContentButton.Name = "addContentButton";
+            this.addContentButton.Size = new System.Drawing.Size(177, 44);
+            this.addContentButton.TabIndex = 2;
+            this.addContentButton.Text = "AddContent";
+            this.addContentButton.UseVisualStyleBackColor = true;
+            this.addContentButton.Click += new System.EventHandler(this.addContentButton_Click);
             // 
-            // button2
+            // removeTreeNodeButton
             // 
-            this.button2.Location = new System.Drawing.Point(61, 73);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(177, 44);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "RemoveTreeNode";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.removeTreeNodeButton.Location = new System.Drawing.Point(61, 73);
+            this.removeTreeNodeButton.Name = "removeTreeNodeButton";
+            this.removeTreeNodeButton.Size = new System.Drawing.Size(177, 44);
+            this.removeTreeNodeButton.TabIndex = 1;
+            this.removeTreeNodeButton.Text = "RemoveTreeNode";
+            this.removeTreeNodeButton.UseVisualStyleBackColor = true;
+            this.removeTreeNodeButton.Click += new System.EventHandler(this.removeTreeNodeButton_Click);
             // 
-            // button1
+            // addTreeNodeButton
             // 
-            this.button1.Location = new System.Drawing.Point(61, 23);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(177, 44);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "AddTreeNode";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.addTreeNodeButton.Location = new System.Drawing.Point(61, 23);
+            this.addTreeNodeButton.Name = "addTreeNodeButton";
+            this.addTreeNodeButton.Size = new System.Drawing.Size(177, 44);
+            this.addTreeNodeButton.TabIndex = 0;
+            this.addTreeNodeButton.Text = "AddTreeNode";
+            this.addTreeNodeButton.UseVisualStyleBackColor = true;
+            this.addTreeNodeButton.Click += new System.EventHandler(this.addTreeNodeButton_Click);
             // 
             // Form1
             // 
@@ -252,14 +244,14 @@ namespace TreeVFlowWFormTest
 
         private System.Windows.Forms.Button button11;
 
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button activeTreeNodeToggleVisibleButton;
 
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button activeTreeNodeHeaderToggleVisibleButton;
+        private System.Windows.Forms.Button activeTreeNodeFooterToggleVisibleButton;
+        private System.Windows.Forms.Button activeContentToggleVisibleButton;
 
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button showActiveTreeNodeButton;
+        private System.Windows.Forms.Button showActiveContentButton;
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblTreeNode;
