@@ -72,12 +72,13 @@ namespace TreeVFlowControl.Imp
             node.ContentNodeClick += (_, args) => ContentNodeClick?.Invoke(this, args);
             node.ContentNodeDoubleClick += (_, args) => ContentNodeDoubleClick?.Invoke(this, args);
         }
-
+        
         public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)
         {
             if(treeNode is TreeVFlowNode treeVFlowNode)
                 ScrollControlIntoView(treeVFlowNode);
         }
+        
         public void ScrollShowTreeNode(Func<IGraphicalTreeNode, bool> predicate)
         {
             var treeNode = _rootNode.TreeDeepFirstOrDefault(predicate);
@@ -95,6 +96,7 @@ namespace TreeVFlowControl.Imp
                 ScrollControlIntoView(contentNode);
         }
 
+        public int PaginationContentNodes { get; set; } = 0;
 
     }
 }
