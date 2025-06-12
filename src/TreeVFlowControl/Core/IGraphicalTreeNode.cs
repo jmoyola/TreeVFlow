@@ -17,6 +17,19 @@ namespace TreeVFlowControl.Core
         public Control Content { get; internal set; }
     }
 
+    public delegate void CancellableEventHandler<T>(object sender, CancellableEventArgs<T> args) where T: EventArgs;
+    public class CancellableEventArgs<T> where T: EventArgs
+    {
+        private T _args;
+        public CancellableEventArgs(T args)
+        {
+            _args = args;
+        }
+        
+        public T Args=>_args;
+        public bool Cancel { get; set; }
+    }
+
     public interface IGraphicalTreeNodeEvents
     {
         event TreeNodeEventHandler TreeNodeHeaderClick;
@@ -25,12 +38,23 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         event TreeNodeEventHandler ContentNodeClick;
         event TreeNodeEventHandler ContentNodeDoubleClick;
-        event TreeNodeEventHandler TreeNodeCollapsed;
-        event TreeNodeEventHandler TreeNodeExpanded;
-        event TreeNodeEventHandler TreeNodeAdded;
-        event TreeNodeEventHandler TreeNodeRemoved;
-        event TreeNodeEventHandler ContentNodeAdded;
-        event TreeNodeEventHandler ContentNodeRemoved;
+        event  CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
+        event TreeNodeEventHandler AfterTreeNodeCollapsed;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpanded;
+        event TreeNodeEventHandler AfterTreeNodeExpanded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
+        event TreeNodeEventHandler AfterTreeNodeAdded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
+        event TreeNodeEventHandler AfterTreeNodeRemoved;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeAdded;
+        event TreeNodeEventHandler AfterContentNodeAdded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
+        event TreeNodeEventHandler AfterContentNodeRemoved;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
+        event TreeNodeEventHandler AfterTreeNodeDisabled;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
+        event TreeNodeEventHandler AfterTreeNodeEnabled;
+
         event TreeNodeEventHandler TreeNodeRefresh;
 
     }
@@ -57,13 +81,15 @@ namespace TreeVFlowControl.Core
         
         void AddContent(Control content);
         void RemoveContent(Control content);
-        void ClearContent();
+        void ClearContentNodes();
         IList<Control> TreeContent { get; }
         void ClearAll();
         bool IsExpanded { get; }
         void ToggleItems();
         void Collapse();
         void Expand();
-
+        void DisableTreeNode();
+        void EnableTreeNode();
+        bool IsDisabled { get; }
     }
 }

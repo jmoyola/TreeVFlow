@@ -38,11 +38,11 @@ namespace TreeVFlowWFormTest
                 _currentContentNode = args.Content;
                 lblContentNode.Text=$"[{args.Content.Name}]";
             };
-            _treeVFlowControl1.TreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
+            _treeVFlowControl1.AfterTreeNodeAdded +=TreeVFlowNode1_TreeNodeAdded;
             _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
-            _treeVFlowControl1.TreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
-            _treeVFlowControl1.TreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.AfterTreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.AfterTreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
         }
 
         private void TreeVFlowNode1_TreeNodeAdded(object sender, TreeNodeEventArgs args)

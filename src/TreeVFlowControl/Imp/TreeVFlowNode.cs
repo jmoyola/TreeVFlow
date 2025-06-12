@@ -121,7 +121,7 @@ namespace TreeVFlowControl.Imp
             if (sender == _header)
                 OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
             else if (sender == _footer)
-                OnTreeNodeHeaderClick(new TreeNodeEventArgs(this, (Control)sender));
+                OnTreeNodeFooterClick(new TreeNodeEventArgs(this, (Control)sender));
             else
                 OnContentNodeClick(new TreeNodeEventArgs(this, (Control)sender));
 
@@ -131,7 +131,7 @@ namespace TreeVFlowControl.Imp
             if (sender == _header)
                 OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
             else if (sender == _footer)
-                OnTreeNodeHeaderDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
+                OnTreeNodeFooterDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
             else
                 OnContentNodeDoubleClick(new TreeNodeEventArgs(this, (Control)sender));
         }
@@ -143,15 +143,24 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         public event TreeNodeEventHandler ContentNodeClick;
         public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeCollapsed;
-        public event TreeNodeEventHandler TreeNodeExpanded;
-        public event TreeNodeEventHandler TreeNodeAdded;
-        public event TreeNodeEventHandler TreeNodeRemoved;
-        public event TreeNodeEventHandler ContentNodeAdded;
-        public event TreeNodeEventHandler ContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
+        public event TreeNodeEventHandler AfterTreeNodeCollapsed;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpanded;
+        public event TreeNodeEventHandler AfterTreeNodeExpanded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
+        public event TreeNodeEventHandler AfterTreeNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
+        public event TreeNodeEventHandler AfterTreeNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeAdded;
+        public event TreeNodeEventHandler AfterContentNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
+        public event TreeNodeEventHandler AfterContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
+        public event TreeNodeEventHandler AfterTreeNodeDisabled;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
+        public event TreeNodeEventHandler AfterTreeNodeEnabled;
+
         public event TreeNodeEventHandler TreeNodeRefresh;
-        public event TreeNodeEventHandler ResizeHeight;
-        public event TreeNodeEventHandler ResizeWidth;
         
         protected virtual void OnTreeNodeHeaderClick(TreeNodeEventArgs args)
         {
@@ -168,22 +177,6 @@ namespace TreeVFlowControl.Imp
         protected virtual void OnTreeNodeFooterDoubleClick(TreeNodeEventArgs args)
         {
             TreeNodeFooterDoubleClick?.Invoke(this, args);
-        }      
-        protected virtual void OnTreeNodeExpanded(TreeNodeEventArgs args)
-        {
-            TreeNodeExpanded?.Invoke(this, args);
-        }
-        protected virtual void OnTreeNodeCollapsed(TreeNodeEventArgs args)
-        {
-            TreeNodeCollapsed?.Invoke(this, args);
-        }
-        protected virtual void OnTreeNodeAdded(TreeNodeEventArgs args)
-        {
-            TreeNodeAdded?.Invoke(this, args);
-        }
-        protected virtual void OnTreeNodeRemoved(TreeNodeEventArgs args)
-        {
-            TreeNodeRemoved?.Invoke(this, args);
         }
         protected virtual void OnTreeNodeRefresh(TreeNodeEventArgs args)
         {
@@ -197,23 +190,70 @@ namespace TreeVFlowControl.Imp
         {
             ContentNodeDoubleClick?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeAdded(TreeNodeEventArgs args)
+        protected virtual void OnBeforeTreeNodeExpanded(CancellableEventArgs<TreeNodeEventArgs> args)
         {
-            ContentNodeAdded?.Invoke(this, args);
+            BeforeTreeNodeExpanded?.Invoke(this, args);
         }
-        protected virtual void OnContentNodeRemoved(TreeNodeEventArgs args)
+        protected virtual void OnAfterTreeNodeExpanded(TreeNodeEventArgs args)
         {
-            ContentNodeRemoved?.Invoke(this, args);
+            AfterTreeNodeExpanded?.Invoke(this, args);
         }
-        protected virtual void OnResizeWidth(TreeNodeEventArgs args)
+        protected virtual void OnBeforeTreeNodeCollapsed(CancellableEventArgs<TreeNodeEventArgs> args)
         {
-            ResizeWidth?.Invoke(this, args);
+            BeforeTreeNodeCollapsed?.Invoke(this, args);
         }
-        protected virtual void OnResizeHeight(TreeNodeEventArgs args)
+        protected virtual void OnAfterTreeNodeCollapsed(TreeNodeEventArgs args)
         {
-            ResizeHeight?.Invoke(this, args);
+            AfterTreeNodeCollapsed?.Invoke(this, args);
         }
-
+        protected virtual void OnBeforeTreeNodeAdded(CancellableEventArgs<TreeNodeEventArgs> args)
+        {
+            BeforeTreeNodeAdded?.Invoke(this, args);
+        }
+        protected virtual void OnAfterTreeNodeAdded(TreeNodeEventArgs args)
+        {
+            AfterTreeNodeAdded?.Invoke(this, args);
+        }
+        protected virtual void OnBeforeTreeNodeRemoved(CancellableEventArgs<TreeNodeEventArgs> args)
+        {
+            BeforeTreeNodeRemoved?.Invoke(this, args);
+        }
+        protected virtual void OnAfterTreeNodeRemoved(TreeNodeEventArgs args)
+        {
+            AfterTreeNodeRemoved?.Invoke(this, args);
+        }
+        protected virtual void OnBeforeContentNodeAdded(CancellableEventArgs<TreeNodeEventArgs>  args)
+        {
+            BeforeContentNodeAdded?.Invoke(this, args);
+        }
+        protected virtual void OnAfterContentNodeAdded(TreeNodeEventArgs args)
+        {
+            AfterContentNodeAdded?.Invoke(this, args);
+        }
+        protected virtual void OnBeforeContentNodeRemoved(CancellableEventArgs<TreeNodeEventArgs> args)
+        {
+            BeforeContentNodeRemoved?.Invoke(this, args);
+        }
+        protected virtual void OnAfterContentNodeRemoved(TreeNodeEventArgs args)
+        {
+            AfterContentNodeRemoved?.Invoke(this, args);
+        }
+        protected virtual void OnBeforeTreeNodeDisabled(CancellableEventArgs<TreeNodeEventArgs> args)
+        {
+            BeforeTreeNodeDisabled?.Invoke(this, args);
+        }
+        protected virtual void OnAfterTreeNodeDisabled(TreeNodeEventArgs args)
+        {
+            AfterTreeNodeDisabled?.Invoke(this, args);
+        }
+        protected virtual void OnBeforeTreeNodeEnabled(CancellableEventArgs<TreeNodeEventArgs> args)
+        {
+            BeforeTreeNodeEnabled?.Invoke(this, args);
+        }
+        protected virtual void OnAfterTreeNodeEnabled(TreeNodeEventArgs args)
+        {
+            AfterTreeNodeEnabled?.Invoke(this, args);
+        }
 #endregion
 
         private void SubControlAdded(Control control)
@@ -252,11 +292,15 @@ namespace TreeVFlowControl.Imp
             try
             {
                 TreeNodeLock.Wait();
+                SuspendLayout();
+                
+                var cb = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this, content));
+                OnBeforeContentNodeAdded(cb);
+                if (cb.Cancel) return;
                 
                 if (content == null) throw new ArgumentNullException(nameof(content));
                 if (TreeNodes.Count > 0) return;
-
-                SuspendLayout();
+                
                 content.SuspendLayout();
                 
                 content.Width = this.Width - this.Margin.Horizontal*2;
@@ -267,7 +311,7 @@ namespace TreeVFlowControl.Imp
                 
                 content.ResumeLayout();
                 
-                OnContentNodeAdded(new TreeNodeEventArgs(this, content));
+                OnAfterContentNodeAdded(new TreeNodeEventArgs(this, content));
             }
             finally
             {
@@ -281,8 +325,12 @@ namespace TreeVFlowControl.Imp
             try
             {
                 TreeNodeLock.Wait();
-                
                 SuspendLayout();
+                
+                var cb = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this, content));
+                OnBeforeContentNodeRemoved(cb);
+                if (cb.Cancel) return;
+                
                 content.SuspendLayout();
                 
                 Controls.Remove(content);
@@ -291,7 +339,7 @@ namespace TreeVFlowControl.Imp
                 content.ResumeLayout();
                 
                 
-                OnContentNodeRemoved(new TreeNodeEventArgs(this, content));
+                OnAfterContentNodeRemoved(new TreeNodeEventArgs(this, content));
             }
             finally
             {
@@ -300,7 +348,7 @@ namespace TreeVFlowControl.Imp
             }
         }
         
-        public void ClearContent()
+        public void ClearContentNodes()
         {
             try
             {
@@ -330,14 +378,18 @@ namespace TreeVFlowControl.Imp
             try
             {
                 TreeNodeLock.Wait();
+                SuspendLayout();
                 
                 var newTreeVFlowNode = newTreeNode as TreeVFlowNode;
                 if (newTreeVFlowNode == null) throw new ArgumentNullException(nameof(newTreeNode));
-
-                SuspendLayout();
-                newTreeVFlowNode.SuspendLayout();
                 
                 newTreeVFlowNode.Visible = true;
+                var cb = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(newTreeVFlowNode));
+                OnBeforeTreeNodeAdded(cb);
+                if (cb.Cancel) return newTreeVFlowNode;
+                
+                newTreeVFlowNode.SuspendLayout();
+                
                 newTreeVFlowNode.LevelIndent = LevelIndent;
                 newTreeVFlowNode.ColumnCount = ColumnCount;
                 Controls.Add(newTreeVFlowNode);
@@ -349,7 +401,7 @@ namespace TreeVFlowControl.Imp
                 newTreeVFlowNode.ResumeLayout();
                 
                 
-                OnTreeNodeAdded(new TreeNodeEventArgs(newTreeVFlowNode));
+                OnAfterTreeNodeAdded(new TreeNodeEventArgs(newTreeVFlowNode));
                 return newTreeVFlowNode;
             }
             finally
@@ -364,20 +416,23 @@ namespace TreeVFlowControl.Imp
             try
             {
                 TreeNodeLock.Wait();
+                SuspendLayout();
                 
                 var treeNodeToRemoveToRemove = treeNodeToRemove as TreeVFlowNode;
                 if (treeNodeToRemoveToRemove == null) throw new ArgumentNullException(nameof(treeNodeToRemove));
 
-                SuspendLayout();
+                var cb = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(treeNodeToRemoveToRemove));
+                OnBeforeTreeNodeRemoved(cb);
+                if (cb.Cancel) return;
 
                 Controls.Remove(treeNodeToRemoveToRemove);
                 
-                ResumeLayout();
-
-                OnTreeNodeRemoved(new TreeNodeEventArgs(treeNodeToRemoveToRemove));
+                
+                OnAfterTreeNodeRemoved(new TreeNodeEventArgs(treeNodeToRemoveToRemove));
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }
@@ -412,7 +467,7 @@ namespace TreeVFlowControl.Imp
                 TreeNodeLock.Wait();
                 
                 ClearTreeNodes();
-                ClearContent();
+                ClearContentNodes();
             }
             finally
             {
@@ -421,20 +476,35 @@ namespace TreeVFlowControl.Imp
         }
         
         public virtual bool IsDisabled=>_isDisabled;
-        public virtual void DisableItem()
+
+        public virtual void DisableTreeNode()
         {
-            if (_isDisabled) return;
-            
-            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=false);
-            _isDisabled = true;
+            DisableTreeNode(true);
         }
-    
-        public virtual void EnableItem()
+
+        public virtual void EnableTreeNode()
         {
-            if (!_isDisabled) return;
+            DisableTreeNode(false);
+        }
         
-            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=true);
-            _isDisabled = false;
+        private void DisableTreeNode(bool disable)
+        {
+            if (_isDisabled==disable) return;
+
+            var bc = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this));
+            if(disable)
+                OnBeforeTreeNodeDisabled(bc);
+            else
+                OnBeforeTreeNodeEnabled(bc);
+            if (bc.Cancel) return;
+            
+            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=!disable);
+            _isDisabled = disable;
+            
+            if(disable)
+                OnAfterTreeNodeDisabled(new TreeNodeEventArgs(this));
+            else
+                OnAfterTreeNodeEnabled(new TreeNodeEventArgs(this));
         }
         
         public bool IsExpanded=>_isExpanded;
@@ -460,6 +530,12 @@ namespace TreeVFlowControl.Imp
                 _isExpanded = expand;
 
                 SuspendLayout();
+                var cb = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this));
+                if (_isExpanded)
+                    OnBeforeTreeNodeExpanded(cb);
+                else
+                    OnBeforeTreeNodeCollapsed(cb);
+                if (cb.Cancel) return;
                 
                 var controls = Controls.Cast<Control>().ToList();
                 for (int i = 0; i < controls.Count; i++)
@@ -471,14 +547,15 @@ namespace TreeVFlowControl.Imp
                     }
 
                 if (_isExpanded)
-                    OnTreeNodeExpanded(new TreeNodeEventArgs(this));
+                    OnAfterTreeNodeExpanded(new TreeNodeEventArgs(this));
                 else
-                    OnTreeNodeCollapsed(new TreeNodeEventArgs(this));
+                    OnAfterTreeNodeCollapsed(new TreeNodeEventArgs(this));
                 
-                ResumeLayout();
+                
             }
             finally
             {
+                ResumeLayout();
                 TreeNodeLock.Release();
             }
         }

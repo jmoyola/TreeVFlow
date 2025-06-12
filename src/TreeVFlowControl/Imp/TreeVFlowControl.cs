@@ -14,12 +14,22 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         public event TreeNodeEventHandler ContentNodeClick;
         public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeCollapsed;
-        public event TreeNodeEventHandler TreeNodeExpanded;
-        public event TreeNodeEventHandler TreeNodeAdded;
-        public event TreeNodeEventHandler TreeNodeRemoved;
-        public event TreeNodeEventHandler ContentNodeAdded;
-        public event TreeNodeEventHandler ContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
+        public event TreeNodeEventHandler AfterTreeNodeCollapsed;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpanded;
+        public event TreeNodeEventHandler AfterTreeNodeExpanded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
+        public event TreeNodeEventHandler AfterTreeNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
+        public event TreeNodeEventHandler AfterTreeNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeAdded;
+        public event TreeNodeEventHandler AfterContentNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
+        public event TreeNodeEventHandler AfterContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
+        public event TreeNodeEventHandler AfterTreeNodeDisabled;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
+        public event TreeNodeEventHandler AfterTreeNodeEnabled;
         public event TreeNodeEventHandler TreeNodeRefresh;
 
         
@@ -44,7 +54,7 @@ namespace TreeVFlowControl.Imp
             _rootNode.LevelIndent = 5;
             _rootNode.RowStyles.Add(new RowStyle(SizeType.AutoSize, 20F));
             _rootNode.Expand();
-            _rootNode.TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
+            _rootNode.AfterTreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
         
         public TreeVFlowNode RootNode=> _rootNode;
@@ -57,20 +67,34 @@ namespace TreeVFlowControl.Imp
         
         private void JoinAllEvents(IGraphicalTreeNode node)
         {
-            node.TreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
-            node.TreeNodeAdded +=(_, args) => TreeNodeAdded?.Invoke(this, args);
-            node.TreeNodeRemoved +=(_, args) => TreeNodeRemoved?.Invoke(this, args);
-            node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
-            node.TreeNodeCollapsed += (_, args) => TreeNodeCollapsed?.Invoke(this, args);
-            node.TreeNodeExpanded += (_, args) => TreeNodeExpanded?.Invoke(this, args);
+            node.AfterTreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
+            
+            node.BeforeTreeNodeCollapsed += (_, args) => BeforeTreeNodeCollapsed?.Invoke(this, args);
+            node.AfterTreeNodeCollapsed += (_, args) => AfterTreeNodeCollapsed?.Invoke(this, args);
+            node.BeforeTreeNodeExpanded += (_, args) => BeforeTreeNodeExpanded?.Invoke(this, args);
+            node.AfterTreeNodeExpanded += (_, args) => AfterTreeNodeExpanded?.Invoke(this, args);
+            
             node.TreeNodeHeaderClick += (_, args) => TreeNodeHeaderClick?.Invoke(this, args);
             node.TreeNodeHeaderDoubleClick += (_, args) => TreeNodeHeaderDoubleClick?.Invoke(this, args);
             node.TreeNodeFooterClick += (_, args) => TreeNodeFooterClick?.Invoke(this, args);
             node.TreeNodeFooterDoubleClick += (_, args) => TreeNodeFooterDoubleClick?.Invoke(this, args);
-            node.ContentNodeAdded +=(_, args) => ContentNodeAdded?.Invoke(this, args);
-            node.ContentNodeRemoved +=(_, args) => ContentNodeRemoved?.Invoke(this, args);
             node.ContentNodeClick += (_, args) => ContentNodeClick?.Invoke(this, args);
             node.ContentNodeDoubleClick += (_, args) => ContentNodeDoubleClick?.Invoke(this, args);
+            
+            
+            node.BeforeTreeNodeAdded +=(_, args) => BeforeTreeNodeAdded?.Invoke(this, args);
+            node.AfterTreeNodeAdded +=(_, args) => AfterTreeNodeAdded?.Invoke(this, args);
+            node.BeforeTreeNodeRemoved +=(_, args) => BeforeTreeNodeRemoved?.Invoke(this, args);
+            node.AfterTreeNodeRemoved +=(_, args) => AfterTreeNodeRemoved?.Invoke(this, args);
+            node.BeforeContentNodeAdded +=(_, args) => BeforeContentNodeAdded?.Invoke(this, args);
+            node.AfterContentNodeAdded +=(_, args) => AfterContentNodeAdded?.Invoke(this, args);
+            node.BeforeContentNodeRemoved +=(_, args) => BeforeContentNodeRemoved?.Invoke(this, args);
+            node.AfterContentNodeRemoved +=(_, args) => AfterContentNodeRemoved?.Invoke(this, args);
+            node.BeforeTreeNodeEnabled +=(_, args) => BeforeTreeNodeEnabled?.Invoke(this, args);
+            node.AfterTreeNodeEnabled +=(_, args) => AfterTreeNodeEnabled?.Invoke(this, args);
+            node.BeforeTreeNodeDisabled +=(_, args) => BeforeTreeNodeDisabled?.Invoke(this, args);
+            node.AfterTreeNodeDisabled +=(_, args) => AfterTreeNodeDisabled?.Invoke(this, args);
+            node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
         }
         
         public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)
