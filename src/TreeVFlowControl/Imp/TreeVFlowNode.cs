@@ -15,7 +15,8 @@ namespace TreeVFlowControl.Imp
         private Control _header;
         private Control _footer;
         private bool _isExpanded;
-        private bool _isDisabled;
+        private bool _isEnabled=true;
+        private bool _isVisible=true;
         
         public TreeVFlowNode()
         : this(null) { }
@@ -155,10 +156,10 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler AfterContentNodeAdded;
         public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
         public event TreeNodeEventHandler AfterContentNodeRemoved;
-        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
-        public event TreeNodeEventHandler AfterTreeNodeDisabled;
-        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
-        public event TreeNodeEventHandler AfterTreeNodeEnabled;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabledChanged;
+        public event TreeNodeEventHandler AfterTreeNodeEnabledChanged;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeVisibleChanged;
+        public event TreeNodeEventHandler AfterTreeNodeVisibleChanged;
 
         public event TreeNodeEventHandler TreeNodeRefresh;
         
@@ -238,21 +239,21 @@ namespace TreeVFlowControl.Imp
         {
             AfterContentNodeRemoved?.Invoke(this, args);
         }
-        protected virtual void OnBeforeTreeNodeDisabled(CancellableEventArgs<TreeNodeEventArgs> args)
+        protected virtual void OnBeforeTreeNodeEnabledChanged(CancellableEventArgs<TreeNodeEventArgs> args)
         {
-            BeforeTreeNodeDisabled?.Invoke(this, args);
+            BeforeTreeNodeEnabledChanged?.Invoke(this, args);
         }
-        protected virtual void OnAfterTreeNodeDisabled(TreeNodeEventArgs args)
+        protected virtual void OnAfterTreeNodeEnabledChanged(TreeNodeEventArgs args)
         {
-            AfterTreeNodeDisabled?.Invoke(this, args);
+            AfterTreeNodeEnabledChanged?.Invoke(this, args);
         }
-        protected virtual void OnBeforeTreeNodeEnabled(CancellableEventArgs<TreeNodeEventArgs> args)
+        protected virtual void OnBeforeTreeNodeVisibleChanged(CancellableEventArgs<TreeNodeEventArgs> args)
         {
-            BeforeTreeNodeEnabled?.Invoke(this, args);
+            BeforeTreeNodeVisibleChanged?.Invoke(this, args);
         }
-        protected virtual void OnAfterTreeNodeEnabled(TreeNodeEventArgs args)
+        protected virtual void OnAfterTreeNodeVisibleChanged(TreeNodeEventArgs args)
         {
-            AfterTreeNodeEnabled?.Invoke(this, args);
+            AfterTreeNodeVisibleChanged?.Invoke(this, args);
         }
 #endregion
 
@@ -475,37 +476,43 @@ namespace TreeVFlowControl.Imp
             }
         }
         
-        public virtual bool IsDisabled=>_isDisabled;
-
-        public virtual void DisableTreeNode()
-        {
-            DisableTreeNode(true);
-        }
-
-        public virtual void EnableTreeNode()
-        {
-            DisableTreeNode(false);
-        }
+        public virtual bool IsEnabled=>_isEnabled;
         
-        private void DisableTreeNode(bool disable)
+        public void SetEnabled(bool enable)
         {
-            if (_isDisabled==disable) return;
+            if (_isEnabled==enable) return;
 
             var bc = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this));
-            if(disable)
-                OnBeforeTreeNodeDisabled(bc);
-            else
-                OnBeforeTreeNodeEnabled(bc);
+            OnBeforeTreeNodeEnabledChanged(bc);
             if (bc.Cancel) return;
             
-            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=!disable);
-            _isDisabled = disable;
+            Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=enable);
+            _isEnabled = enable;
             
-            if(disable)
-                OnAfterTreeNodeDisabled(new TreeNodeEventArgs(this));
-            else
-                OnAfterTreeNodeEnabled(new TreeNodeEventArgs(this));
+            OnAfterTreeNodeEnabledChanged(new TreeNodeEventArgs(this));
         }
+        public void SetVisible(bool visible)
+        {
+            if (_isVisible==visible) return;
+
+            var bc = new CancellableEventArgs<TreeNodeEventArgs>(new TreeNodeEventArgs(this));
+            OnBeforeTreeNodeVisibleChanged(bc);
+            if (bc.Cancel) return;
+            
+            _isVisible = visible;
+            
+            OnAfterTreeNodeVisibleChanged(new TreeNodeEventArgs(this));
+        }
+        
+        public void RefreshUI()
+        {
+            //Controls.Cast<Control>().ToList().ForEach(v=>v.Enabled=v.iseenable);
+            
+            
+            //Controls.Cast<Control>().ToList().ForEach(v=>v.Visible=v.is_isVisible);
+        }
+        
+        public virtual bool IsVisible=>_isVisible;
         
         public bool IsExpanded=>_isExpanded;
         public void ToggleItems()

@@ -26,10 +26,10 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler AfterContentNodeAdded;
         public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
         public event TreeNodeEventHandler AfterContentNodeRemoved;
-        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
-        public event TreeNodeEventHandler AfterTreeNodeDisabled;
-        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
-        public event TreeNodeEventHandler AfterTreeNodeEnabled;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeVisibleChanged;
+        public event TreeNodeEventHandler AfterTreeNodeVisibleChanged;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabledChanged;
+        public event TreeNodeEventHandler AfterTreeNodeEnabledChanged;
         public event TreeNodeEventHandler TreeNodeRefresh;
 
         
@@ -90,10 +90,10 @@ namespace TreeVFlowControl.Imp
             node.AfterContentNodeAdded +=(_, args) => AfterContentNodeAdded?.Invoke(this, args);
             node.BeforeContentNodeRemoved +=(_, args) => BeforeContentNodeRemoved?.Invoke(this, args);
             node.AfterContentNodeRemoved +=(_, args) => AfterContentNodeRemoved?.Invoke(this, args);
-            node.BeforeTreeNodeEnabled +=(_, args) => BeforeTreeNodeEnabled?.Invoke(this, args);
-            node.AfterTreeNodeEnabled +=(_, args) => AfterTreeNodeEnabled?.Invoke(this, args);
-            node.BeforeTreeNodeDisabled +=(_, args) => BeforeTreeNodeDisabled?.Invoke(this, args);
-            node.AfterTreeNodeDisabled +=(_, args) => AfterTreeNodeDisabled?.Invoke(this, args);
+            node.BeforeTreeNodeEnabledChanged +=(_, args) => BeforeTreeNodeEnabledChanged?.Invoke(this, args);
+            node.AfterTreeNodeEnabledChanged +=(_, args) => AfterTreeNodeEnabledChanged?.Invoke(this, args);
+            node.BeforeTreeNodeVisibleChanged +=(_, args) => BeforeTreeNodeVisibleChanged?.Invoke(this, args);
+            node.AfterTreeNodeVisibleChanged +=(_, args) => AfterTreeNodeVisibleChanged?.Invoke(this, args);
             node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
         }
         

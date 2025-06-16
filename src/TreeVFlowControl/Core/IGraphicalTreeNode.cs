@@ -50,10 +50,10 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler AfterContentNodeAdded;
         event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
         event TreeNodeEventHandler AfterContentNodeRemoved;
-        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeDisabled;
-        event TreeNodeEventHandler AfterTreeNodeDisabled;
-        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabled;
-        event TreeNodeEventHandler AfterTreeNodeEnabled;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabledChanged;
+        event TreeNodeEventHandler AfterTreeNodeEnabledChanged;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeVisibleChanged;
+        event TreeNodeEventHandler AfterTreeNodeVisibleChanged;
 
         event TreeNodeEventHandler TreeNodeRefresh;
 
@@ -88,8 +88,10 @@ namespace TreeVFlowControl.Core
         void ToggleItems();
         void Collapse();
         void Expand();
-        void DisableTreeNode();
-        void EnableTreeNode();
-        bool IsDisabled { get; }
+        void SetEnabled(bool enable);
+        bool IsEnabled { get; }
+        bool IsVisible { get; }
+        void SetVisible(bool visible);
+        void RefreshUI();
     }
 }
