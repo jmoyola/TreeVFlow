@@ -42,7 +42,7 @@ namespace TreeVFlowWFormTest
             _treeVFlowControl1.TreeNodeRefresh +=TreeVFlowNode1_TreeNodeRefresh;
             
             _treeVFlowControl1.AfterTreeNodeCollapsed +=TreeVFlowNode1_TreeNodeRefresh;
-            _treeVFlowControl1.AfterTreeNodeExpanded +=TreeVFlowNode1_TreeNodeRefresh;
+            _treeVFlowControl1.AfterTreeNodeExpandedChanged +=TreeVFlowNode1_TreeNodeRefresh;
         }
 
         private void TreeVFlowNode1_TreeNodeAdded(object sender, TreeNodeEventArgs args)

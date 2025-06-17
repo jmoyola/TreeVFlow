@@ -16,8 +16,8 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler ContentNodeDoubleClick;
         public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
         public event TreeNodeEventHandler AfterTreeNodeCollapsed;
-        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpanded;
-        public event TreeNodeEventHandler AfterTreeNodeExpanded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpandedChanged;
+        public event TreeNodeEventHandler AfterTreeNodeExpandedChanged;
         public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
         public event TreeNodeEventHandler AfterTreeNodeAdded;
         public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
@@ -53,7 +53,7 @@ namespace TreeVFlowControl.Imp
             _rootNode.Header = null;
             _rootNode.LevelIndent = 5;
             _rootNode.RowStyles.Add(new RowStyle(SizeType.AutoSize, 20F));
-            _rootNode.Expand();
+            _rootNode.SetExpanded(true);
             _rootNode.AfterTreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
         
@@ -69,10 +69,8 @@ namespace TreeVFlowControl.Imp
         {
             node.AfterTreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
             
-            node.BeforeTreeNodeCollapsed += (_, args) => BeforeTreeNodeCollapsed?.Invoke(this, args);
-            node.AfterTreeNodeCollapsed += (_, args) => AfterTreeNodeCollapsed?.Invoke(this, args);
-            node.BeforeTreeNodeExpanded += (_, args) => BeforeTreeNodeExpanded?.Invoke(this, args);
-            node.AfterTreeNodeExpanded += (_, args) => AfterTreeNodeExpanded?.Invoke(this, args);
+            node.BeforeTreeNodeExpandedChanged += (_, args) => BeforeTreeNodeExpandedChanged?.Invoke(this, args);
+            node.AfterTreeNodeExpandedChanged += (_, args) => AfterTreeNodeExpandedChanged?.Invoke(this, args);
             
             node.TreeNodeHeaderClick += (_, args) => TreeNodeHeaderClick?.Invoke(this, args);
             node.TreeNodeHeaderDoubleClick += (_, args) => TreeNodeHeaderDoubleClick?.Invoke(this, args);

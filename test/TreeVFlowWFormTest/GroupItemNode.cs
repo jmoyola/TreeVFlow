@@ -121,17 +121,13 @@ public class GroupItemNode:TreeVFlowNode
     private void ShowMoreClick()
     {
         RefreshPaging();
-        
-        
     }
 
-    protected override void OnAfterTreeNodeExpanded(TreeNodeEventArgs args)
+    protected override void OnAfterTreeNodeExpandedChanged(TreeNodeEventArgs args)
     {
-        ((Button)Header).Image = ArrowUpImage;
-    }
-
-    protected override void OnAfterTreeNodeCollapsed(TreeNodeEventArgs args)
-    {
-        ((Button)Header).Image = ArrowDownImage;
+        if(args.TreeNode.IsExpanded)
+            ((Button)Header).Image = ArrowUpImage;
+        else
+            ((Button)Header).Image = ArrowDownImage;
     }
 }

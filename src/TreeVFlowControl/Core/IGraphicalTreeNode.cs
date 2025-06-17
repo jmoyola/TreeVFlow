@@ -20,7 +20,7 @@ namespace TreeVFlowControl.Core
     public delegate void CancellableEventHandler<T>(object sender, CancellableEventArgs<T> args) where T: EventArgs;
     public class CancellableEventArgs<T> where T: EventArgs
     {
-        private T _args;
+        private readonly T _args;
         public CancellableEventArgs(T args)
         {
             _args = args;
@@ -38,10 +38,8 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         event TreeNodeEventHandler ContentNodeClick;
         event TreeNodeEventHandler ContentNodeDoubleClick;
-        event  CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
-        event TreeNodeEventHandler AfterTreeNodeCollapsed;
-        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpanded;
-        event TreeNodeEventHandler AfterTreeNodeExpanded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpandedChanged;
+        event TreeNodeEventHandler AfterTreeNodeExpandedChanged;
         event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
         event TreeNodeEventHandler AfterTreeNodeAdded;
         event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
@@ -73,6 +71,8 @@ namespace TreeVFlowControl.Core
         IList<IGraphicalTreeNode> TreeNodes { get; }
         void ClearTreeNodes();
         IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
+        IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, int index);
+        IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, Func<object, object, int> comparator);
         void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
         IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate);
         IEnumerable<IGraphicalTreeNode> TreeDeepWhere(Func<IGraphicalTreeNode, bool> predicate);
@@ -86,12 +86,10 @@ namespace TreeVFlowControl.Core
         void ClearAll();
         bool IsExpanded { get; }
         void ToggleItems();
-        void Collapse();
-        void Expand();
-        void SetEnabled(bool enable);
+        void SetExpanded(bool expanded);
+        void SetEnabled(bool enabled);
         bool IsEnabled { get; }
         bool IsVisible { get; }
         void SetVisible(bool visible);
-        void RefreshUI();
     }
 }
