@@ -321,6 +321,31 @@ namespace TreeVFlowControl.Imp
             });
         }
 
+        public void InsertContent(Control content, int index)
+        {
+            OnAddContent(content, (c)=>{
+                Controls.Add(c);
+                Controls.SetChildIndex(c, (_header == null ? 0 : 1) + index);
+            });
+        }
+        
+        public void InsertContent(Control content, Func<object, object, int> comparator)
+        {
+            OnAddContent(content, (c)=>{
+                Controls.Add(c);
+                
+                int offset = (_header == null ? 0 : 1);
+                int end = TreeContent.Count + offset - 1;
+                int index;
+                for (index = offset; index < end; index++)
+                {
+                    if (comparator(content, Controls[index]) > 0)
+                        break;
+                }
+                Controls.SetChildIndex(c, index);
+            });
+        }
+        
         public void RemoveContent(Control content)
         {
             try

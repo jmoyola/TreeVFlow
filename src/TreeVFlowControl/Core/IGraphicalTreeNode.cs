@@ -80,6 +80,8 @@ namespace TreeVFlowControl.Core
         IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
         
         void AddContent(Control content);
+        void InsertContent(Control content, int index);
+        void InsertContent(Control content, Func<object, object, int> comparator);
         void RemoveContent(Control content);
         void ClearContentNodes();
         IList<Control> TreeContent { get; }
