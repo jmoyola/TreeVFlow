@@ -14,15 +14,22 @@ namespace TreeVFlowControl.Imp
         public event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         public event TreeNodeEventHandler ContentNodeClick;
         public event TreeNodeEventHandler ContentNodeDoubleClick;
-        public event TreeNodeEventHandler TreeNodeExpandedChanged;
-        public event TreeNodeEventHandler TreeNodeVisibleChanged;
-        public event TreeNodeEventHandler ContentNodeVisibleChanged;
-        public event TreeNodeEventHandler TreeNodeEnabledChanged;
-        public event TreeNodeEventHandler ContentNodeEnabledChanged;
-        public event TreeNodeEventHandler TreeNodeAdded;
-        public event TreeNodeEventHandler TreeNodeRemoved;
-        public event TreeNodeEventHandler ContentNodeAdded;
-        public event TreeNodeEventHandler ContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeCollapsed;
+        public event TreeNodeEventHandler AfterTreeNodeCollapsed;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpandedChanged;
+        public event TreeNodeEventHandler AfterTreeNodeExpandedChanged;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
+        public event TreeNodeEventHandler AfterTreeNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
+        public event TreeNodeEventHandler AfterTreeNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeAdded;
+        public event TreeNodeEventHandler AfterContentNodeAdded;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
+        public event TreeNodeEventHandler AfterContentNodeRemoved;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeVisibleChanged;
+        public event TreeNodeEventHandler AfterTreeNodeVisibleChanged;
+        public event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabledChanged;
+        public event TreeNodeEventHandler AfterTreeNodeEnabledChanged;
         public event TreeNodeEventHandler TreeNodeRefresh;
 
         
@@ -46,8 +53,8 @@ namespace TreeVFlowControl.Imp
             _rootNode.Header = null;
             _rootNode.LevelIndent = 5;
             _rootNode.RowStyles.Add(new RowStyle(SizeType.AutoSize, 20F));
-            _rootNode.Expand=true;
-            _rootNode.TreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
+            _rootNode.SetExpanded(true);
+            _rootNode.AfterTreeNodeAdded+=(_, args) =>JoinAllEvents(args.TreeNode);
         }
         
         public TreeVFlowNode RootNode=> _rootNode;
@@ -60,32 +67,40 @@ namespace TreeVFlowControl.Imp
         
         private void JoinAllEvents(IGraphicalTreeNode node)
         {
-            node.TreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
-            node.TreeNodeAdded +=(_, args) => TreeNodeAdded?.Invoke(this, args);
-            node.TreeNodeRemoved +=(_, args) => TreeNodeRemoved?.Invoke(this, args);
-            node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
+            node.AfterTreeNodeAdded +=(_, args) => JoinAllEvents(args.TreeNode);
             
-            node.TreeNodeExpandedChanged += (_, args) => TreeNodeExpandedChanged?.Invoke(this, args);
-            node.TreeNodeEnabledChanged += (_, args) => TreeNodeEnabledChanged?.Invoke(this, args);
-            node.ContentNodeEnabledChanged += (_, args) => ContentNodeEnabledChanged?.Invoke(this, args);
-            node.TreeNodeVisibleChanged += (_, args) => TreeNodeVisibleChanged?.Invoke(this, args);
-            node.ContentNodeVisibleChanged += (_, args) => ContentNodeVisibleChanged?.Invoke(this, args);
+            node.BeforeTreeNodeExpandedChanged += (_, args) => BeforeTreeNodeExpandedChanged?.Invoke(this, args);
+            node.AfterTreeNodeExpandedChanged += (_, args) => AfterTreeNodeExpandedChanged?.Invoke(this, args);
             
             node.TreeNodeHeaderClick += (_, args) => TreeNodeHeaderClick?.Invoke(this, args);
             node.TreeNodeHeaderDoubleClick += (_, args) => TreeNodeHeaderDoubleClick?.Invoke(this, args);
             node.TreeNodeFooterClick += (_, args) => TreeNodeFooterClick?.Invoke(this, args);
             node.TreeNodeFooterDoubleClick += (_, args) => TreeNodeFooterDoubleClick?.Invoke(this, args);
-            node.ContentNodeAdded +=(_, args) => ContentNodeAdded?.Invoke(this, args);
-            node.ContentNodeRemoved +=(_, args) => ContentNodeRemoved?.Invoke(this, args);
             node.ContentNodeClick += (_, args) => ContentNodeClick?.Invoke(this, args);
             node.ContentNodeDoubleClick += (_, args) => ContentNodeDoubleClick?.Invoke(this, args);
+            
+            
+            node.BeforeTreeNodeAdded +=(_, args) => BeforeTreeNodeAdded?.Invoke(this, args);
+            node.AfterTreeNodeAdded +=(_, args) => AfterTreeNodeAdded?.Invoke(this, args);
+            node.BeforeTreeNodeRemoved +=(_, args) => BeforeTreeNodeRemoved?.Invoke(this, args);
+            node.AfterTreeNodeRemoved +=(_, args) => AfterTreeNodeRemoved?.Invoke(this, args);
+            node.BeforeContentNodeAdded +=(_, args) => BeforeContentNodeAdded?.Invoke(this, args);
+            node.AfterContentNodeAdded +=(_, args) => AfterContentNodeAdded?.Invoke(this, args);
+            node.BeforeContentNodeRemoved +=(_, args) => BeforeContentNodeRemoved?.Invoke(this, args);
+            node.AfterContentNodeRemoved +=(_, args) => AfterContentNodeRemoved?.Invoke(this, args);
+            node.BeforeTreeNodeEnabledChanged +=(_, args) => BeforeTreeNodeEnabledChanged?.Invoke(this, args);
+            node.AfterTreeNodeEnabledChanged +=(_, args) => AfterTreeNodeEnabledChanged?.Invoke(this, args);
+            node.BeforeTreeNodeVisibleChanged +=(_, args) => BeforeTreeNodeVisibleChanged?.Invoke(this, args);
+            node.AfterTreeNodeVisibleChanged +=(_, args) => AfterTreeNodeVisibleChanged?.Invoke(this, args);
+            node.TreeNodeRefresh +=(_, args) => TreeNodeRefresh?.Invoke(this, args);
         }
-
+        
         public void ScrollShowTreeNode(IGraphicalTreeNode treeNode)
         {
             if(treeNode is TreeVFlowNode treeVFlowNode)
                 ScrollControlIntoView(treeVFlowNode);
         }
+        
         public void ScrollShowTreeNode(Func<IGraphicalTreeNode, bool> predicate)
         {
             var treeNode = _rootNode.TreeDeepFirstOrDefault(predicate);
@@ -103,6 +118,7 @@ namespace TreeVFlowControl.Imp
                 ScrollControlIntoView(contentNode);
         }
 
+        public int PaginationContentNodes { get; set; } = 0;
 
     }
 }

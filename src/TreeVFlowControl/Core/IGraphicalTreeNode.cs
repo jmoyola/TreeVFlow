@@ -17,6 +17,19 @@ namespace TreeVFlowControl.Core
         public Control Content { get; internal set; }
     }
 
+    public delegate void CancellableEventHandler<T>(object sender, CancellableEventArgs<T> args) where T: EventArgs;
+    public class CancellableEventArgs<T> where T: EventArgs
+    {
+        private readonly T _args;
+        public CancellableEventArgs(T args)
+        {
+            _args = args;
+        }
+        
+        public T Args=>_args;
+        public bool Cancel { get; set; }
+    }
+
     public interface IGraphicalTreeNodeEvents
     {
         event TreeNodeEventHandler TreeNodeHeaderClick;
@@ -25,15 +38,21 @@ namespace TreeVFlowControl.Core
         event TreeNodeEventHandler TreeNodeFooterDoubleClick;
         event TreeNodeEventHandler ContentNodeClick;
         event TreeNodeEventHandler ContentNodeDoubleClick;
-        event TreeNodeEventHandler TreeNodeExpandedChanged;
-        event TreeNodeEventHandler TreeNodeVisibleChanged;
-        event TreeNodeEventHandler ContentNodeVisibleChanged;
-        event TreeNodeEventHandler TreeNodeEnabledChanged;
-        event TreeNodeEventHandler ContentNodeEnabledChanged;
-        event TreeNodeEventHandler TreeNodeAdded;
-        event TreeNodeEventHandler TreeNodeRemoved;
-        event TreeNodeEventHandler ContentNodeAdded;
-        event TreeNodeEventHandler ContentNodeRemoved;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeExpandedChanged;
+        event TreeNodeEventHandler AfterTreeNodeExpandedChanged;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeAdded;
+        event TreeNodeEventHandler AfterTreeNodeAdded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeRemoved;
+        event TreeNodeEventHandler AfterTreeNodeRemoved;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeAdded;
+        event TreeNodeEventHandler AfterContentNodeAdded;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeContentNodeRemoved;
+        event TreeNodeEventHandler AfterContentNodeRemoved;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeEnabledChanged;
+        event TreeNodeEventHandler AfterTreeNodeEnabledChanged;
+        event CancellableEventHandler<TreeNodeEventArgs> BeforeTreeNodeVisibleChanged;
+        event TreeNodeEventHandler AfterTreeNodeVisibleChanged;
+
         event TreeNodeEventHandler TreeNodeRefresh;
 
     }
@@ -47,12 +66,13 @@ namespace TreeVFlowControl.Core
         Control Footer { get; set; }
         IGraphicalTreeNode ParentTreeNode { get;}
         Panel PanelContainer { get; }
-        IList<IGraphicalTreeNode> NodeBranch { get; }
         IGraphicalTreeNode RootTreeNode { get; }
         int TreeLevel { get; }
         IList<IGraphicalTreeNode> TreeNodes { get; }
         void ClearTreeNodes();
         IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode);
+        IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, int index);
+        IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, Func<object, object, int> comparator);
         void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove);
         IGraphicalTreeNode TreeDeepFirstOrDefault(Func<IGraphicalTreeNode, bool> predicate);
         IEnumerable<IGraphicalTreeNode> TreeDeepWhere(Func<IGraphicalTreeNode, bool> predicate);
@@ -60,11 +80,18 @@ namespace TreeVFlowControl.Core
         IEnumerable<Control> ContentDeepWhere(Func<Control, bool> predicate);
         
         void AddContent(Control content);
+        void InsertContent(Control content, int index);
+        void InsertContent(Control content, Func<object, object, int> comparator);
         void RemoveContent(Control content);
-        void ClearContent();
+        void ClearContentNodes();
         IList<Control> TreeContent { get; }
         void ClearAll();
         bool IsExpanded { get; }
-        bool Expand { get; set; }
+        void ToggleItems();
+        void SetExpanded(bool expanded);
+        void SetEnabled(bool enabled);
+        bool IsEnabled { get; }
+        bool IsVisible { get; }
+        void SetVisible(bool visible);
     }
 }
