@@ -313,7 +313,7 @@ namespace TreeVFlowControl.Imp
             }
         }
         
-        public void AddContent(Control content)
+        public virtual void AddContent(Control content)
         {
             OnAddContent(content, (c)=>{
                 Controls.Add(c);
@@ -321,7 +321,7 @@ namespace TreeVFlowControl.Imp
             });
         }
 
-        public void InsertContent(Control content, int index)
+        public virtual void InsertContent(Control content, int index)
         {
             OnAddContent(content, (c)=>{
                 Controls.Add(c);
@@ -329,7 +329,7 @@ namespace TreeVFlowControl.Imp
             });
         }
         
-        public void InsertContent(Control content, Func<object, object, int> comparator)
+        public virtual void InsertContent(Control content, Func<object, object, int> comparator)
         {
             OnAddContent(content, (c)=>{
                 Controls.Add(c);
@@ -346,7 +346,7 @@ namespace TreeVFlowControl.Imp
             });
         }
         
-        public void RemoveContent(Control content)
+        public virtual void RemoveContent(Control content)
         {
             try
             {
@@ -436,7 +436,7 @@ namespace TreeVFlowControl.Imp
             }
         }
 
-        public IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode)
+        public virtual IGraphicalTreeNode AddTreeNode(IGraphicalTreeNode newTreeNode)
         {
             return OnAddTreeNode(newTreeNode, node =>{
                 Controls.Add(node);
@@ -444,7 +444,7 @@ namespace TreeVFlowControl.Imp
             } );
         }
         
-        public IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, int index)
+        public virtual IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode, int index)
         {
             return OnAddTreeNode(newTreeNode, node =>{
                 Controls.Add(node);
@@ -452,7 +452,7 @@ namespace TreeVFlowControl.Imp
             });
         }
 
-        public IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode,
+        public virtual IGraphicalTreeNode InsertTreeNode(IGraphicalTreeNode newTreeNode,
             Func<object, object, int> comparator)
         {
             return OnAddTreeNode(newTreeNode, node =>{
@@ -470,7 +470,7 @@ namespace TreeVFlowControl.Imp
             });
         }
         
-        public void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove)
+        public virtual void RemoveTreeNode(IGraphicalTreeNode treeNodeToRemove)
         {
             try
             {
@@ -612,12 +612,14 @@ namespace TreeVFlowControl.Imp
         {
             var controls = Controls.Cast<Control>().ToList();
             for (int i = 0; i < controls.Count; i++)
+            {
                 if (i > (_header == null ? -1 : 0) && i < controls.Count - (_footer == null ? 0 : 1))
                 {
                     controls[i].SuspendLayout();
-                    controls[i].Visible =expanded;
+                    controls[i].Visible = expanded;
                     controls[i].ResumeLayout();
                 }
+            }
         }
         protected override void OnTextChanged(EventArgs e)
         {

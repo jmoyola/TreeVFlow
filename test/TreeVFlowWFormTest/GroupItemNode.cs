@@ -11,6 +11,13 @@ namespace TreeVFlowWFormTest;
 
 public class GroupItemNode:TreeVFlowNode
 {
+    public class ControlProperies
+    {
+        public bool PageVisible { get; set; }
+    }
+    
+    private IDictionary<Control, ControlProperies> _controlProperies = new Dictionary<Control, ControlProperies>();
+    
     private int _contentPageSize = 5;
     private int _contentPage = 1;
     private int _maxPaginatedContent;
@@ -122,10 +129,21 @@ public class GroupItemNode:TreeVFlowNode
     {
         RefreshPaging();
     }
-
-    protected override void OnAfterTreeNodeExpandedChanged(TreeNodeEventArgs args)
+    
+    protected override void OnSetExpanded(bool expanded)
     {
-        if(args.TreeNode.IsExpanded)
+        var controls = Controls.Cast<Control>().ToList();
+        for (int i = 0; i < controls.Count; i++)
+        {
+            if (i > (Header == null ? -1 : 0) && i < controls.Count - (Footer == null ? 0 : 1))
+            {
+                controls[i].SuspendLayout();
+                controls[i].Visible = expanded;
+                controls[i].ResumeLayout();
+            }
+        }
+        
+        if(expanded)
             ((Button)Header).Image = ArrowUpImage;
         else
             ((Button)Header).Image = ArrowDownImage;
